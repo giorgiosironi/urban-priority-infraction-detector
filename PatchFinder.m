@@ -17,11 +17,13 @@ classdef PatchFinder
         end
     end
     methods
+        % this will become: search(self, patch, cumulativeHistogram[WithWeightingDecorator]
         function voteMap = search(self, patch, image)
             voteMap = VoteMap();
             for dx=-1*self.maximumDx:self.maximumDx
                 for dy=-1*self.maximumDy:self.maximumDy
                     candidateArea = patch.area.displace(dx, dy);
+                    % this will become: cumulativeH.getHistogram(candidateArea)
                     cut = candidateArea.cut(image);
                     candidateHistogram = GrayHistogram.fromImageData(cut, self.binsNumber);
                     d = patch.histogram.getDistance(candidateHistogram, self.comparator);
