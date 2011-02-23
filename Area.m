@@ -22,5 +22,8 @@ classdef Area
         function area = displace(self, dx, dy)
             area = Area.fromXYtoXY(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
         end
+        function imageData = cut(self, image)
+            imageData = image(self.minX:self.maxX, self.minY:self.maxY);
+        end
     end
 end
