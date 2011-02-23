@@ -18,4 +18,9 @@ classdef Area
             area = Area(x1, y1, x2, y2);
         end
     end
+    methods
+        function area = displace(self, dx, dy)
+            area = Area.fromXYtoXY(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
+        end
+    end
 end
