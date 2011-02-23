@@ -1,9 +1,9 @@
-classdef GreyHistogram
+classdef GrayHistogram
     properties(SetAccess=private)
         bins;
     end
     methods
-        function obj = GreyHistogram(bins)
+        function obj = GrayHistogram(bins)
             obj.bins = bins;
         end
     end
@@ -19,15 +19,15 @@ classdef GreyHistogram
                     bins(bin) = bins(bin) + 1;
                 end
             end
-            H = GreyHistogram(bins);
+            H = GrayHistogram(bins);
         end
     end
     methods
         function H = plus(first, second)
-            H = GreyHistogram(first.bins + second.bins);
+            H = GrayHistogram(first.bins + second.bins);
         end
         function H = minus(first, second)
-            H = GreyHistogram(first.bins - second.bins);
+            H = GrayHistogram(first.bins - second.bins);
         end
         function d = getDistance(self, anotherHistogram, comparator)
             d = comparator.getDistance(self.bins, anotherHistogram.bins);
