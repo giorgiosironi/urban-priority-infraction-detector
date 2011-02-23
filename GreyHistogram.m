@@ -29,5 +29,8 @@ classdef GreyHistogram
         function H = minus(first, second)
             H = GreyHistogram(first.bins - second.bins);
         end
+        function d = getDistance(self, anotherHistogram, comparator)
+            d = comparator.getDistance(self.bins, anotherHistogram.bins);
+        end
     end
 end
