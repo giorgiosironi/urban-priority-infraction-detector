@@ -21,4 +21,4 @@ end
 map = VoteMap.sum(voteMaps, 10);
 [distances, indexes] = sort(map.distances, 'ascend');
 distances(1:5)
-map.offsets(indexes(1:5))
+map.offsets(indexes(1:5), :)
