@@ -2,7 +2,7 @@ classdef Frame
     properties(SetAccess=private)
         content;
     end
-    methods(Access=private)
+    methods
         function obj = Frame(content)
             obj.content = content;
         end
