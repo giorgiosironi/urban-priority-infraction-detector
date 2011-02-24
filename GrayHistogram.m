@@ -4,7 +4,9 @@ classdef GrayHistogram
     end
     methods
         function obj = GrayHistogram(bins)
-            obj.bins = bins;
+            if (nargin > 0)
+                obj.bins = bins;
+            end
         end
     end
     methods(Static)

@@ -7,3 +7,8 @@ H = strategy.fromPixelData(250);
 assertEqual(GrayHistogram([0; 1]), H);
 H = strategy.fromPixelData(50);
 assertEqual(GrayHistogram([1; 0]), H);
+
+function testCreatesAnEmptyGrayHistogram
+strategy = GrayHistogramStrategy(2);
+H = strategy.getEmptyHistogram();
+assertEqual([0 0], size(H))

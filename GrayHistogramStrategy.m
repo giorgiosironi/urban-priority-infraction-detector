@@ -9,5 +9,8 @@ classdef GrayHistogramStrategy
         function H = fromPixelData(self, pixel)
             H = GrayHistogram.fromImageData(pixel, self.binsNumber);
         end
+        function H = getEmptyHistogram(self)
+            H = GrayHistogram.empty();
+        end
     end
 end
