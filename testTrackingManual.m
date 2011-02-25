@@ -1,4 +1,4 @@
-selector = PatchesSelector(2, 2);
+selector = PatchesSelector(5, 5);
 finder = PatchFinder(15, 15, SimpleComparator());
 frames = cell(2, 1);
 %frames{1} = Frame.fromFile('frames/image40.jpg');
@@ -22,11 +22,10 @@ for i=1:size(areas, 1)
     H = GrayHistogram.fromImageData(cut, 16);
     patch = Patch(H, areas{i});
     patches = [patches; {patch}];
-    sprintf('Extracted patch %d', i)
     voteMaps = [voteMaps; {finder.search(patch, histograms)}];
     sprintf('Finished patch %d', i)
 end
-map = VoteMap.sum(voteMaps, VoteMapThresholdStrategy(10));
+map = VoteMap.combine(voteMaps, VoteMapPercentileStrategy(75));
 [distances, indexes] = sort(map.distances, 'ascend');
 distances(1:5)
 map.offsets(indexes(1:5), :)
