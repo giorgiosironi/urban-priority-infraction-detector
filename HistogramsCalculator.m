@@ -14,7 +14,6 @@ classdef HistogramsCalculator < handle
                 for y=1:size(inputImage, 2)
                     singlePixelHistograms(x, y) = self.strategy.fromPixelData(inputImage(x, y));
                 end
-                sprintf('created single histogram for line x=%d', x)
             end
             integralH = self.factory.buildFromImage(singlePixelHistograms, self.strategy);
         end
