@@ -1,4 +1,4 @@
-classdef PatchFinder
+classdef PatchFinder < handle
     properties(SetAccess=private)
         maximumDx;
         maximumDy;

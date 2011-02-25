@@ -1,4 +1,4 @@
-classdef PatchesSelector
+classdef PatchesSelector < handle
     properties(SetAccess=private)
         xQuantity;
         yQuantity;
@@ -8,7 +8,7 @@ classdef PatchesSelector
             obj.xQuantity = xQuantity;
             obj.yQuantity = yQuantity;
         end
-        function areas = getPatchDefinitions(self, area);
+        function areas = getPatchDefinitions(self, area)
             areas = cell(0);
             xTotalSize = area.maxX - area.minX + 1;
             yTotalSize = area.maxY - area.minY + 1;

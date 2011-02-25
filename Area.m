@@ -1,4 +1,4 @@
-classdef Area
+classdef Area < handle
     properties(SetAccess=private)
         minX;
         minY;

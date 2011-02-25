@@ -1,4 +1,4 @@
-classdef BackgroundRemover
+classdef BackgroundRemover < handle
     properties
         maximumDistance;
     end

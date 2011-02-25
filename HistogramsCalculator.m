@@ -16,7 +16,7 @@ classdef HistogramsCalculator < handle
                 end
                 sprintf('created single histogram for line x=%d', x)
             end
-            integralH = self.factory.buildFromImage(singlePixelHistograms);
+            integralH = self.factory.buildFromImage(singlePixelHistograms, self.strategy);
         end
     end
 end

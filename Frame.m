@@ -1,4 +1,4 @@
-classdef Frame
+classdef Frame < handle
     properties(SetAccess=private)
         content;
     end

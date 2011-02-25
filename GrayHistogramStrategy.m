@@ -1,4 +1,4 @@
-classdef GrayHistogramStrategy
+classdef GrayHistogramStrategy < handle
     properties(SetAccess=private)
         binsNumber;
     end
@@ -8,6 +8,9 @@ classdef GrayHistogramStrategy
         end
         function H = fromPixelData(self, pixel)
             H = GrayHistogram.fromImageData(pixel, self.binsNumber);
+        end
+        function H = fromBinsData(self, binsData)
+            H = GrayHistogram(binsData);
         end
         function H = getEmptyHistogram(self)
             H = GrayHistogram.empty();

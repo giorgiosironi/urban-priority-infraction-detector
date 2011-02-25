@@ -1,4 +1,4 @@
-classdef Patch
+classdef Patch < handle
     properties(SetAccess=private)
         histogram;
         area;

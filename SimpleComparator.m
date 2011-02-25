@@ -1,4 +1,4 @@
-classdef SimpleComparator
+classdef SimpleComparator < handle
     methods
         function d = getDistance(self, firstHBins, secondHBins)
             firstHBins = firstHBins / norm(firstHBins);

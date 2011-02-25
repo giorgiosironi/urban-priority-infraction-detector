@@ -1,4 +1,4 @@
-classdef GrayHistogram
+classdef GrayHistogram < handle
     properties(SetAccess=private)
         bins;
     end
