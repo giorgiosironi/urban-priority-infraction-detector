@@ -18,18 +18,19 @@ classdef VoteMap < handle
         end
     end
     methods(Static)
-        function totalMap = sum(maps, threshold)
+        function totalMap = combine(maps, combinationStrategy)
             offsets = maps{1}.offsets;
-            distances = zeros(size(maps{1}.distances));
-            for i=1:size(maps, 1)
-                currentDistances = maps{i}.distances;
-                if (nargin > 1)
-                    mask = currentDistances > threshold;
-                    currentDistances(mask) = threshold;
+            distancesPerOffset = zeros(size(maps{1}.distances));
+            for j=1:size(offsets, 1)
+                dx = offsets(j, 1);
+                dy = offsets(j, 2);
+                distancesPerPatch = zeros(size(maps));
+                for i=1:size(maps, 1)
+                    distancesPerPatch(i) = maps{i}.distances(j);
                 end
-                distances = distances + currentDistances;
+                distancesPerOffset(j) = combinationStrategy.combinePointVotes(distancesPerPatch);
             end
-            totalMap = VoteMap(offsets, distances);
+            totalMap = VoteMap(offsets, distancesPerOffset);
         end
     end
 end

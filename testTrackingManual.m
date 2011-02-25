@@ -26,7 +26,7 @@ for i=1:size(areas, 1)
     voteMaps = [voteMaps; {finder.search(patch, histograms)}];
     sprintf('Finished patch %d', i)
 end
-map = VoteMap.sum(voteMaps, 10);
+map = VoteMap.sum(voteMaps, VoteMapThresholdStrategy(10));
 [distances, indexes] = sort(map.distances, 'ascend');
 distances(1:5)
 map.offsets(indexes(1:5), :)
