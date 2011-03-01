@@ -9,6 +9,9 @@ content(11:50, 51:60) = ones(40, 10);
 objects = finder.findIn(Frame(content));
 assertEqual([2 1], size(objects));
 assertEqual([3 1], size(objects{1}.areas));
+assertEqual(11, objects{1}.areas{1}.minY);
+assertEqual(21, objects{1}.areas{2}.minY);
+assertEqual(31, objects{1}.areas{3}.minY);
 assertEqual([4 1], size(objects{2}.areas));
 
 function testMergesObjectsWithNorthAndWestProtuberances

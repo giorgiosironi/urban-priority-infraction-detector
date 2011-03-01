@@ -83,8 +83,8 @@ classdef ObjectFinder < handle
                 positions = labels{i};
                 areas = cell(0);
                 for j=1:size(positions, 1)
-                    x = positions(1);
-                    y = positions(2);
+                    x = positions(j, 1); %JJJJJ
+                    y = positions(j, 2); % JJJJ
                     areas = [areas; {areaGroup.at(x, y)}];
                 end
                 if (size(areas, 1) > 0)
