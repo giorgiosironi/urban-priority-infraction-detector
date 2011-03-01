@@ -9,8 +9,8 @@ classdef ForegroundHistogram < handle
                 error('The image is empty.')
             end
             bins = zeros(2, 1);
-            bins(1) == sum(sum(imagePatch < 0));
-            bins(2) == sum(sum(imagePatch >= 0));
+            bins(1) = sum(sum(imagePatch < 0));
+            bins(2) = sum(sum(imagePatch >= 0));
             H = ForegroundHistogram(bins(1), bins(2));
         end
     end
