@@ -8,8 +8,8 @@ classdef PatchesSelector < handle
             obj.xQuantity = xQuantity;
             obj.yQuantity = yQuantity;
         end
-        function areas = getPatchDefinitions(self, area)
-            areas = cell(0);
+        function result = getAreaGroup(self, area)
+            areas = cell(self.xQuantity, self.yQuantity);
             xTotalSize = area.maxX - area.minX + 1;
             yTotalSize = area.maxY - area.minY + 1;
             xSize = ceil(xTotalSize / self.xQuantity);
@@ -22,10 +22,11 @@ classdef PatchesSelector < handle
                     maxY = minY + ySize - 1;
                     maxX = min(maxX, area.maxX);
                     maxY = min(maxY, area.maxY);
-                    patch = Area.fromXYtoXY(minX, minY, maxX, maxY);
-                    areas = [areas; {patch}];
+                    subArea = Area.fromXYtoXY(minX, minY, maxX, maxY);
+                    areas{i, j} = subArea;
                 end
             end
+            result = AreaGroup(areas);
         end
     end
 end
