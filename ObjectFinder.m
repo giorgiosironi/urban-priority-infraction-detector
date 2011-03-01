@@ -3,20 +3,20 @@ classdef ObjectFinder < handle
         areaGroupSelector;
         histogramStrategy;
         backgroundThreshold;
+        labelsContainerFactory;
     end
     methods
-        function obj = ObjectFinder(areaGroupSelector, histogramStrategy, backgroundThreshold)
+        function obj = ObjectFinder(areaGroupSelector, histogramStrategy, backgroundThreshold, labelsContainerFactory)
             obj.areaGroupSelector = areaGroupSelector;
             obj.histogramStrategy = histogramStrategy;
             obj.backgroundThreshold = backgroundThreshold;
+            obj.labelsContainerFactory = labelsContainerFactory;
         end
         function objects = findIn(self, frame)
             areaGroup = self.areaGroupSelector.getAreaGroup(frame.getArea());
             histograms = self.getForegroundAreas(frame, areaGroup);
             sizeOfGroup = size(histograms);
-            labels = zeros(size(histograms));
-            currentLabels = 0;
-            equivalences = [];
+            labels = self.labelsContainerFactory.createContainer(sizeOfGroup(1), sizeOfGroup(2));
             for x=1:sizeOfGroup(1)
                 for y=1:sizeOfGroup(2)
                     if (isempty(histograms{x, y}))
@@ -27,27 +27,23 @@ classdef ObjectFinder < handle
                     northX = x-1;
                     northY = y;
                     if (self.isValid(histograms, westX, westY) && self.isValid(histograms, northX, northY))
-                        firstLabel = labels(westX, westY);
-                        secondLabel = labels(northX, northY);
+                        firstLabel = labels.at(westX, westY);
+                        secondLabel = labels.at(northX, northY);
                         if (firstLabel ~= secondLabel) 
-                            minimumLabel = min(firstLabel, secondLabel);
-                            maximumLabel = max(firstLabel, secondLabel);
-                            labels(x, y) = minimumLabel;
-                            equivalences = [equivalences; minimumLabel, maximumLabel];
+                            labels.label(x, y, firstLabel);
+                            labels.unionOf(firstLabel, secondLabel);
                         else 
-                            labels(x, y) = firstLabel;
+                            labels.label(x, y, firstLabel);
                         end
                     elseif (self.isValid(histograms, westX, westY))
-                        labels(x, y) = labels(westX, westY);
+                        labels.label(x, y, labels.at(westX, westY));
                     elseif (self.isValid(histograms, northX, northY))
-                        labels(x, y) = labels(northX, northY);
+                        labels.label(x, y, labels.at(northX, northY));
                     else
-                        currentLabels = currentLabels + 1;
-                        labels(x, y) = currentLabels;
+                        labels.label(x, y, labels.newLabel());
                     end
                 end
             end
-            labels = self.unionOfEquivalences(labels, equivalences);
             objects = self.extractObjectsBySameLabel(labels, areaGroup);
         end
     end
@@ -80,17 +76,16 @@ classdef ObjectFinder < handle
             end
             b = ~isempty(histograms{x, y});
         end
-        function objects = extractObjectsBySameLabel(self, labels, areaGroup)
-            sizeOfGroup = size(areaGroup);
+        function objects = extractObjectsBySameLabel(self, labelsContainer, areaGroup)
+            labels = labelsContainer.getLabels();
             objects = cell(0);
-            for label=1:max(max(labels))
+            for i=1:size(labels, 1)
+                positions = labels{i};
                 areas = cell(0);
-                for x=1:sizeOfGroup(1)
-                    for y=1:sizeOfGroup(2)
-                        if (labels(x, y) == label)
-                            areas = [areas; {areaGroup.at(x, y)}];
-                        end
-                    end
+                for j=1:size(positions, 1)
+                    x = positions(1);
+                    y = positions(2);
+                    areas = [areas; {areaGroup.at(x, y)}];
                 end
                 if (size(areas, 1) > 0)
                     objects = [objects; {TrackedObject(areas)}];

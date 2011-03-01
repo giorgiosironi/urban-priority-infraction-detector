@@ -2,7 +2,7 @@ function test_suite = testObjectFinder
 initTestSuite;
 
 function testProducesAListOfObjectsEachComposedByAreas
-finder = ObjectFinder(PatchesSelector(10, 10), ForegroundHistogramStrategy(), 1);
+finder = ObjectFinder(PatchesSelector(10, 10), ForegroundHistogramStrategy(), 1, LabelsContainerFactory());
 content = ones(100) * -1;
 content(11:20, 11:40) = ones(10, 30);
 content(11:50, 51:60) = ones(40, 10);
@@ -12,7 +12,7 @@ assertEqual([3 1], size(objects{1}.areas));
 assertEqual([4 1], size(objects{2}.areas));
 
 function testMergesObjectsWithNorthAndWestProtuberances
-finder = ObjectFinder(PatchesSelector(10, 10), ForegroundHistogramStrategy(), 1);
+finder = ObjectFinder(PatchesSelector(10, 10), ForegroundHistogramStrategy(), 1, LabelsContainerFactory());
 content = ones(100) * -1;
 content(31:40, 11:40) = ones(10, 30);
 content(11:40, 31:40) = ones(30, 10);
