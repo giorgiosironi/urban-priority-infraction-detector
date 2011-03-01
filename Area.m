@@ -9,7 +9,13 @@ classdef Area < handle
         function obj = Area(minX, minY, maxX, maxY)
             obj.minX = minX;
             obj.minY = minY;
+            if (maxX < minX)
+                error(sprintf('maxX=%d is less than minX=%d', maxX, minX));
+            end
             obj.maxX = maxX;
+            if (maxX < minX)
+                error(sprintf('maxY=%d is less than minY=%d', maxY, minY));
+            end
             obj.maxY = maxY;
         end
     end
