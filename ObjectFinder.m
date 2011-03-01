@@ -51,7 +51,7 @@ classdef ObjectFinder < handle
             objects = self.extractObjectsBySameLabel(labels, areaGroup);
         end
     end
-    methods%(Access=private)
+    methods(Access=private)
         function histograms = getForegroundAreas(self, frame, areaGroup)
             sizeOfGroup = areaGroup.size();
             histograms = cell(sizeOfGroup);
