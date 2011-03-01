@@ -15,6 +15,7 @@ classdef GrayHistogram < handle
             if (size(imagePatch, 1) == 0 || size(imagePatch, 2) == 0)
                 error('The image is empty.')
             end
+            imagePatch = single(imagePatch);
             for i=1:size(imagePatch, 1)
                 for j=1:size(imagePatch, 2)
                     bin = ceil(imagePatch(i, j) / 255 * binsNumber);
