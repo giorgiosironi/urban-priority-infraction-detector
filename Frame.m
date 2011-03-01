@@ -6,6 +6,10 @@ classdef Frame < handle
         function obj = Frame(content)
             obj.content = content;
         end
+        function area = getArea(self)
+            dimensions = size(self.content);
+            area = Area.fromXYtoXY(1, 1, dimensions(1), dimensions(2));
+        end
     end
     methods(Static)
         function frame = fromFile(path)
