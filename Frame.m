@@ -10,6 +10,9 @@ classdef Frame < handle
             dimensions = size(self.content);
             area = Area.fromXYtoXY(1, 1, dimensions(1), dimensions(2));
         end
+        function result = cut(self, area)
+            result = area.cut(self.content);
+        end
     end
     methods(Static)
         function frame = fromFile(path)

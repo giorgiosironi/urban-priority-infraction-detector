@@ -14,4 +14,9 @@ assertEqual(1, area.minY);
 assertEqual(480, area.maxX);
 assertEqual(640, area.maxY);
 
-
+function testCanBeCutWithAnArea()
+content = zeros(10, 10);
+content(5, 6) = 1;
+frame = Frame(content);
+result = frame.cut(Area.fromXYtoXY(5, 6, 5, 6));
+assertEqual(1, result);
