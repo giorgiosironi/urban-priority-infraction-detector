@@ -44,3 +44,8 @@ assertEqual(19, group.at(1, 2).maxY);
 assertEqual(9, group.at(2, 1).maxX);
 assertEqual(9, group.at(2, 2).maxX);
 assertEqual(19, group.at(2, 2).maxY);
+
+function testWorksWithRealVideoDimensions
+selector = PatchesSelector(48, 64);
+group = selector.getAreaGroup(Area.fromXYtoXY(1, 1, 480, 640));
+assertEqual([48 64], group.size());
