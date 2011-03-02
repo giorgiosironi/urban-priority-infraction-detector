@@ -3,7 +3,7 @@ classdef CornersObjectDistanceStrategy
         function d = computeDistance(self, firstAreas, secondAreas)
             corners = double(self.getMinimumBoundingRectangle(firstAreas));
             secondCorners = double(self.getMinimumBoundingRectangle(secondAreas));
-            d = norm(double(corners - secondCorners));
+            d = norm(corners - secondCorners);
         end
     end
     methods(Access=private)
@@ -27,7 +27,7 @@ classdef CornersObjectDistanceStrategy
                 if (x > maxX)
                     maxX = x;
                 end
-                if (y < maxY)
+                if (y > maxY)
                     maxY = y;
                 end
             end
