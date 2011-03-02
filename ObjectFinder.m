@@ -88,7 +88,7 @@ classdef ObjectFinder < handle
                     areas = [areas; {areaGroup.at(x, y)}];
                 end
                 if (size(areas, 1) > 0)
-                    objects = [objects; {TrackedObject(areas)}];
+                    objects = [objects; {TrackedObjectPosition(areas)}];
                 end
             end
         end
