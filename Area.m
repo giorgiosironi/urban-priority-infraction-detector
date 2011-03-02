@@ -7,16 +7,21 @@ classdef Area < handle
     end
     methods(Access=private)
         function obj = Area(minX, minY, maxX, maxY)
-            obj.minX = minX;
-            obj.minY = minY;
+            obj.minX = uint16(minX);
+            obj.minY = uint16(minY);
             if (maxX < minX)
                 error(sprintf('maxX=%d is less than minX=%d', maxX, minX));
             end
-            obj.maxX = maxX;
+            obj.maxX = uint16(maxX);
             if (maxX < minX)
                 error(sprintf('maxY=%d is less than minY=%d', maxY, minY));
             end
-            obj.maxY = maxY;
+            obj.maxY = uint16(maxY);
+        end
+    end
+    methods
+        function c = getCentroid(self)
+            c = [(self.minX + self.maxX) / 2, (self.minY + self.maxY) / 2];
         end
     end
     methods(Static)
