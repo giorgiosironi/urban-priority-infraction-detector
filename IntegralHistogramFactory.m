@@ -1,24 +1,29 @@
 classdef IntegralHistogramFactory < handle
+    properties
+        strategy;
+    end
     methods
-        function integralH = buildFromImage(self, singleHistograms, strategy)
-            bins = size(singleHistograms(1, 1).bins, 1);
-            content = zeros([size(singleHistograms) bins]);
-            for x=1:size(singleHistograms, 1)
-                for y=1:size(singleHistograms, 2)
-                    total = singleHistograms(x, y).bins;
+        function obj = IntegralHistogramFactory(strategy)
+            obj.strategy = strategy;
+        end
+        function integralH = buildFromImage(self, image)
+            bins = self.strategy.assignBin(image);
+            content = zeros([size(image) self.strategy.binsNumber]);
+            for x=1:size(bins, 1)
+                for y=1:size(bins, 2)
+                    content(x, y, bins(x, y)) = 1;
                     if (x-1 > 0)
-                        total = total + squeeze(content(x-1, y, :));
+                        content(x, y, :) = content(x, y, :) + content(x-1, y, :);
                     end
                     if (y-1 > 0)
-                        total = total + squeeze(content(x, y-1, :));
+                        content(x, y, :) = content(x, y, :) + content(x, y-1, :);
                     end
                     if (x-1 > 0 && y-1 > 0)
-                        total = total - squeeze(content(x-1, y-1, :));
+                        content(x, y, :) = content(x, y, :) - content(x-1, y-1, :);
                     end
-                    content(x, y, :) = total;
                 end
             end
-            integralH = IntegralHistogram(content, strategy);
+            integralH = IntegralHistogram(content, self.strategy);
         end
     end
 end

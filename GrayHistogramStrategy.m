@@ -6,14 +6,14 @@ classdef GrayHistogramStrategy < handle
         function obj = GrayHistogramStrategy(binsNumber)
             obj.binsNumber = binsNumber;
         end
-        function H = fromPixelData(self, pixel)
-            H = GrayHistogram.fromImageData(pixel, self.binsNumber);
+        function bin = assignBin(self, grayPixel)
+            grayPixel = double(grayPixel);
+            bin = ceil(grayPixel / 255 * self.binsNumber);
+            correctIndex = find(bin == 0);
+            bin(correctIndex) = 1;
         end
         function H = fromBinsData(self, binsData)
             H = GrayHistogram(binsData);
-        end
-        function H = getEmptyHistogram(self)
-            H = GrayHistogram.empty();
         end
     end
 end
