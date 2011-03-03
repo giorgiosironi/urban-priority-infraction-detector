@@ -3,10 +3,10 @@ initTestSuite;
 
 function testCreatesItselfFromOppositeCorners
 area = Area.fromXYtoXY(1, 2, 3, 4);
-assertEqual(uint16(1), area.minX);
-assertEqual(uint16(2), area.minY);
-assertEqual(uint16(3), area.maxX);
-assertEqual(uint16(4), area.maxY);
+assertTrue(1 == area.minX);
+assertTrue(2 == area.minY);
+assertTrue(3 == area.maxX);
+assertTrue(4 == area.maxY);
 
 function testCreatesADisplacedVersionOfItself
 area = Area.fromXYtoXY(1, 2, 3, 4);
@@ -22,6 +22,13 @@ assertEqual(Area.fromXYtoXY(103, 3, 104, 4), neighbors{2});
 assertEqual(Area.fromXYtoXY(101, 5, 102, 6), neighbors{3});
 assertEqual(Area.fromXYtoXY(99, 3, 100, 4), neighbors{4});
 
+function testLimitsItsFourConnectedDisplacementOnTheWestAndNorthSidesOfTheImage
+area = Area.fromXYtoXY(1, 1, 2, 2);
+neighbors = area.getNeighbors();
+assertEqual([2 1], size(neighbors));
+assertEqual(Area.fromXYtoXY(3, 1, 4, 2), neighbors{1});
+assertEqual(Area.fromXYtoXY(1, 3, 2, 4), neighbors{2});
+
 function testCutsAnImageOverItsMask
 area = Area.fromXYtoXY(1, 2, 3, 4);
 image = [0 1 1 1; 0 1 1 1; 0 1 1 1; 0 0 0 0];
@@ -31,5 +38,6 @@ assertEqual(ones(3), cut);
 function testCalculatesCentroid
 area = Area.fromXYtoXY(11, 21, 30, 40);
 centroid = area.getCentroid();
-assertEqual(uint16([21 31]), centroid);
+assertTrue(21 == centroid(1));
+assertTrue(31 == centroid(2));
 
