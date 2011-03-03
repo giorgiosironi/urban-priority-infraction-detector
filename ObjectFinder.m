@@ -1,14 +1,14 @@
 classdef ObjectFinder < handle
     properties(SetAccess=private)
         areaGroupSelector;
-        foregroundForegroundHistogramStrategy;
+        foregroundHistogramStrategy;
         backgroundThreshold;
         labelsContainerFactory;
     end
     methods
-        function obj = ObjectFinder(areaGroupSelector, foregroundForegroundHistogramStrategy, backgroundThreshold, labelsContainerFactory)
+        function obj = ObjectFinder(areaGroupSelector, foregroundHistogramStrategy, backgroundThreshold, labelsContainerFactory)
             obj.areaGroupSelector = areaGroupSelector;
-            obj.foregroundForegroundHistogramStrategy = foregroundForegroundHistogramStrategy;
+            obj.foregroundHistogramStrategy = foregroundHistogramStrategy;
             obj.backgroundThreshold = backgroundThreshold;
             obj.labelsContainerFactory = labelsContainerFactory;
         end
@@ -54,7 +54,7 @@ classdef ObjectFinder < handle
             for x=1:sizeOfGroup(1)
                 for y=1:sizeOfGroup(2)
                     patch = frame.cut(areaGroup.at(x, y));
-                    histogram = self.foregroundForegroundHistogramStrategy.fromPixelData(patch);
+                    histogram = self.foregroundHistogramStrategy.fromPixelData(patch);
                     if (histogram.isValid(self.backgroundThreshold))
                         histograms{x, y} = histogram;
                     end
