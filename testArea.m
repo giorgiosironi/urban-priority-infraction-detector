@@ -46,3 +46,15 @@ centroid = area.getCentroid();
 assertTrue(21 == centroid(1));
 assertTrue(31 == centroid(2));
 
+function testDetectsCollisionWithAnotherArea
+area = Area.fromXYtoXY(11, 31, 20, 40);
+assertTrue(area.collidesWith(Area.fromXYtoXY(19, 39, 100, 100)));
+assertFalse(area.collidesWith(Area.fromXYtoXY(21, 41, 100, 100)));
+assertFalse(area.collidesWith(Area.fromXYtoXY(21, 39, 100, 100)));
+assertFalse(area.collidesWith(Area.fromXYtoXY(19, 41, 100, 100)));
+assertTrue(area.collidesWith(Area.fromXYtoXY(1, 1, 12, 32)));
+assertFalse(area.collidesWith(Area.fromXYtoXY(1, 1, 10, 32)));
+assertFalse(area.collidesWith(Area.fromXYtoXY(1, 1, 12, 30)));
+intersectingArea = Area.fromXYtoXY(18, 35, 26, 37);
+assertTrue(area.collidesWith(intersectingArea));
+assertTrue(intersectingArea.collidesWith(area));

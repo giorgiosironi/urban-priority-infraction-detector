@@ -45,8 +45,30 @@ classdef Area < handle
         function b = equals(self, another)
             b = self.minX == another.minX && self.minY == another.minY && self.maxX == another.maxX && self.maxY == another.maxY;
         end
+        function b = collidesWith(self, another)
+            b = false;
+            anotherFourCorners = another.getFourCorners();
+            for i=1:4
+                x = anotherFourCorners(i, 1);
+                y = anotherFourCorners(i, 2);
+                if (self.hasPoint(x, y))
+                    b = true;
+                end
+            end
+            selfFourCorners = self.getFourCorners();
+            for i=1:4
+                x = selfFourCorners(i, 1);
+                y = selfFourCorners(i, 2);
+                if (another.hasPoint(x, y))
+                    b = true;
+                end
+            end
+        end
     end
     methods(Access=private)
+        function b = hasPoint(self, x, y)
+            b = self.minX <= x && self.maxX >= x && self.minY <= y && self.maxY >= y;
+        end
         function area = getWestNeighbor(self)
             dy = - int16(self.sizeY());
             if (dy + self.minY < 1)
@@ -84,6 +106,9 @@ classdef Area < handle
         end
         function s = sizeY(self)
             s = self.maxY - self.minY + 1;
+        end
+        function fourCorners = getFourCorners(self)
+            fourCorners = [self.minX self.minY; self.minX self.maxY; self.maxX self.minY; self.maxX self.maxY];
         end
     end
 end
