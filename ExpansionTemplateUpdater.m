@@ -6,7 +6,8 @@ classdef ExpansionTemplateUpdater
         function obj = ExpansionTemplateUpdater(validityStrategy)
             obj.validityStrategy = validityStrategy;
         end
-        function objects = updateTemplate(self, objects, foreground, histograms)
+        function newObjects = updateTemplate(self, objects, foreground, histograms)
+            newObjects = cell(0);
             for i=1:size(objects, 1)
                 newPatches = cell(0);
                 for j=1:size(objects{i}.patches)
@@ -15,12 +16,22 @@ classdef ExpansionTemplateUpdater
                         candidateArea = candidateAreas{k};
                         candidatePortion = foreground.cut(candidateArea);
                         if (self.validityStrategy.isValid(candidatePortion))
-                            newPatch = Patch(histograms.getHistogram(candidateArea), candidateArea);
-                            newPatches = [newPatches; {newPatch}];
+                            inAnotherObject = false;
+                            for l=1:size(objects, 1)
+                                if (l ~= i && objects{l}.collidesWith(candidateArea))
+                                    % we look in old objects
+                                    % should suffice as new patches are only the ones entering the frame
+                                    inAnotherObject = true;
+                                end
+                            end
+                            if (~inAnotherObject)
+                                newPatch = Patch(histograms.getHistogram(candidateArea), candidateArea);
+                                newPatches = [newPatches; {newPatch}];
+                            end
                         end
                     end
                 end
-                objects{i} = objects{i}.addPatches(newPatches);
+                newObjects = [newObjects; {objects{i}.addPatches(newPatches)}];
             end
         end
     end

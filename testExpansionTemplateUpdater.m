@@ -54,3 +54,15 @@ foreground = ones(6);
 
 objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
 assertEqual([5 1], size(objects{1}.patches));
+
+function testCannotExpandObjectsOverOtherObjects(histogramFactory)
+objects = {TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2))}); TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 3, 2, 5))})};
+updater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
+
+nextFrame = zeros(2, 5);
+newHistograms = histogramFactory.buildFromImage(nextFrame);
+foreground = ones(2, 5);
+
+objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
+assertEqual([1 1], size(objects{1}.patches));
+assertEqual([1 1], size(objects{2}.patches));
