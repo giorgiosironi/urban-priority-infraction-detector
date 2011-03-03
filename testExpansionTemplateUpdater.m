@@ -32,8 +32,16 @@ foreground(3:4, 1:6) = 1;
 
 objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
 assertEqual([3 1], size(objects{1}.patches));
-expansion = objects{1}.patches{3};
 
 function testDoesNotExpandTemplateOutOfTheImage(histogramFactory)
+objects = {TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2))})};
+updater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
+
+nextFrame = zeros(2);
+newHistograms = histogramFactory.buildFromImage(nextFrame);
+foreground = ones(2);
+
+objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
+assertEqual([1 1], size(objects{1}.patches));
 
 function testExpandsTemplateFollowingFourConnectivity(histogramFactory)
