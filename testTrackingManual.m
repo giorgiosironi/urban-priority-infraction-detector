@@ -4,6 +4,8 @@ finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), L
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
 patchFinder = PatchFinder(30, 30, SimpleComparator());
 matcher = ObjectMatcher(CornersObjectDistanceStrategy());
+templateUpdater = HistogramsTemplateUpdater(MaximumDistanceAcceptanceStrategy(SimpleComparator(), 0.1));
+expansionUpdater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
 
 video = zeros(480, 640, 1, L);
 for i=1:L
@@ -50,7 +52,9 @@ for i=1:size(objects, 1)
     dx = offsets(1);
     dy = offsets(2);
     objects{i} = objects{i}.move(dx, dy);
+    objects{i} = templateUpdater.updateTemplate(objects{i}, secondFrameHistograms);
 end
+expansionUpdater.updateTemplate(objects, Frame(video(:, :, :, 51)), secondFrameHistograms);
 
 'Looking now in 3rd frame'
 for i=1:size(objects, 1)
