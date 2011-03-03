@@ -4,7 +4,7 @@ initTestSuite;
 function histogramFactory = setup
 histogramFactory = IntegralHistogramFactory(GrayHistogramStrategy(2));
 
-function testExpandTemplateToAccomodateNewPatchesOfEnteringObjects(histogramFactory)
+function testExpandsTemplateToAccomodateNewPatchesOfEnteringObjects(histogramFactory)
 objects = {TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(3, 3, 4, 4))})};
 updater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
 
@@ -18,3 +18,12 @@ objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
 expansion = objects{1}.patches{2};
 assertEqual(Area.fromXYtoXY(3, 1, 4, 2), expansion.area);
 assertEqual(GrayHistogram([1; 3]), expansion.histogram);
+
+function testDoesNotIncludePatchesAlreadyInTheTemplate
+nextFrame = zeros(6);
+nextFrame(3:4, 1:2) = [0 255; 255 255];
+objects = {TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(3, 3, 4, 4)); Patch(NaN, Area.fromXYtoXY(3, 5, 4, 6))})};
+
+function testDoesNotExpandTemplateOutOfTheImage
+
+function testExpandsTemplateFollowingFourConnectivity
