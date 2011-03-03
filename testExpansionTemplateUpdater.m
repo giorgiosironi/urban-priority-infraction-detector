@@ -45,3 +45,12 @@ objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
 assertEqual([1 1], size(objects{1}.patches));
 
 function testExpandsTemplateFollowingFourConnectivity(histogramFactory)
+objects = {TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(3, 3, 4, 4))})};
+updater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
+
+nextFrame = zeros(6);
+newHistograms = histogramFactory.buildFromImage(nextFrame);
+foreground = ones(6);
+
+objects = updater.updateTemplate(objects, Frame(foreground), newHistograms);
+assertEqual([5 1], size(objects{1}.patches));
