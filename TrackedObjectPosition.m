@@ -21,6 +21,14 @@ classdef TrackedObjectPosition < handle
         function newPosition = addPatches(self, patches)
             newPosition = TrackedObjectPosition.withoutDuplicates([self.patches; patches]);
         end
+        function b = collidesWith(self, area)
+            b = false;
+            for i=1:size(self.patches, 1)
+                if (self.patches{i}.area.collidesWith(area))
+                    b = true;
+                end
+            end
+        end
     end
     methods(Static)
         function position = withoutDuplicates(patches)

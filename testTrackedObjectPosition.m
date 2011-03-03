@@ -19,3 +19,8 @@ function testAddsPatchesThatCoverTheSameAreaOnlyOnce
 position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2))});
 position = position.addPatches({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2))});
 assertEqual([1 1], size(position.patches));
+
+function testCollidesWithAnAreaIfOneOfItsAreasCollideWithIt
+position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2)); Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))});
+assertTrue(position.collidesWith(Area.fromXYtoXY(2, 3, 3, 4)));
+assertFalse(position.collidesWith(Area.fromXYtoXY(3, 3, 4, 4)));
