@@ -1,18 +1,18 @@
 classdef ObjectFinder < handle
     properties(SetAccess=private)
         areaGroupSelector;
-        histogramStrategy;
+        foregroundForegroundHistogramStrategy;
         backgroundThreshold;
         labelsContainerFactory;
     end
     methods
-        function obj = ObjectFinder(areaGroupSelector, histogramStrategy, backgroundThreshold, labelsContainerFactory)
+        function obj = ObjectFinder(areaGroupSelector, foregroundForegroundHistogramStrategy, backgroundThreshold, labelsContainerFactory)
             obj.areaGroupSelector = areaGroupSelector;
-            obj.histogramStrategy = histogramStrategy;
+            obj.foregroundForegroundHistogramStrategy = foregroundForegroundHistogramStrategy;
             obj.backgroundThreshold = backgroundThreshold;
             obj.labelsContainerFactory = labelsContainerFactory;
         end
-        function objects = findIn(self, frame)
+        function objects = findIn(self, frame, integralHistogram)
             areaGroup = self.areaGroupSelector.getAreaGroup(frame.getArea());
             histograms = self.getForegroundAreas(frame, areaGroup);
             sizeOfGroup = size(histograms);
@@ -44,7 +44,7 @@ classdef ObjectFinder < handle
                     end
                 end
             end
-            objects = self.extractObjectsBySameLabel(labels, areaGroup, histograms);
+            objects = self.extractObjectsBySameLabel(labels, areaGroup, integralHistogram);
         end
     end
     methods(Access=private)
@@ -54,7 +54,7 @@ classdef ObjectFinder < handle
             for x=1:sizeOfGroup(1)
                 for y=1:sizeOfGroup(2)
                     patch = frame.cut(areaGroup.at(x, y));
-                    histogram = self.histogramStrategy.fromPixelData(patch);
+                    histogram = self.foregroundForegroundHistogramStrategy.fromPixelData(patch);
                     if (histogram.isValid(self.backgroundThreshold))
                         histograms{x, y} = histogram;
                     end
@@ -77,7 +77,9 @@ classdef ObjectFinder < handle
                 for j=1:size(positions, 1)
                     x = positions(j, 1); %JJJJJ
                     y = positions(j, 2); % JJJJ
-                    patches = [patches; {Patch(histograms{x, y}, areaGroup.at(x, y))}];
+                    area = areaGroup.at(x, y);
+                    histogram = histograms.getHistogram(area);
+                    patches = [patches; {Patch(histogram, area)}];
                 end
                 if (size(patches, 1) > 0)
                     objects = [objects; {TrackedObjectPosition(patches)}];
