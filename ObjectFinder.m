@@ -44,7 +44,7 @@ classdef ObjectFinder < handle
                     end
                 end
             end
-            objects = self.extractObjectsBySameLabel(labels, areaGroup);
+            objects = self.extractObjectsBySameLabel(labels, areaGroup, histograms);
         end
     end
     methods(Access=private)
@@ -61,14 +61,6 @@ classdef ObjectFinder < handle
                 end
             end
         end
-        function labels = unionOfEquivalences(self, labels, equivalences)
-            for i=1:size(equivalences, 1)
-                from = equivalences(i, 1);
-                to = equivalences(i, 2);
-                indexes = find(labels == from);
-                labels(indexes) = to;
-            end
-        end
         function b = isValid(self, histograms, x, y)
             if (x <= 0|| y <= 0)
                 b = 0;
@@ -76,19 +68,19 @@ classdef ObjectFinder < handle
             end
             b = ~isempty(histograms{x, y});
         end
-        function objects = extractObjectsBySameLabel(self, labelsContainer, areaGroup)
+        function objects = extractObjectsBySameLabel(self, labelsContainer, areaGroup, histograms)
             labels = labelsContainer.getLabels();
             objects = cell(0);
             for i=1:size(labels, 1)
                 positions = labels{i};
-                areas = cell(0);
+                patches = cell(0);
                 for j=1:size(positions, 1)
                     x = positions(j, 1); %JJJJJ
                     y = positions(j, 2); % JJJJ
-                    areas = [areas; {areaGroup.at(x, y)}];
+                    patches = [patches; {Patch(histograms{x, y}, areaGroup.at(x, y))}];
                 end
-                if (size(areas, 1) > 0)
-                    objects = [objects; {TrackedObjectPosition(areas)}];
+                if (size(patches, 1) > 0)
+                    objects = [objects; {TrackedObjectPosition(patches)}];
                 end
             end
         end

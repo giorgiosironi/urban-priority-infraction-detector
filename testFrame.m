@@ -9,10 +9,10 @@ function testCreatesItselfFromImageFile
 frame = Frame.fromFile('frames/image40.jpg');
 assertEqual([480 640 3], size(frame.content));
 area = frame.getArea();
-assertEqual(1, area.minX);
-assertEqual(1, area.minY);
-assertEqual(480, area.maxX);
-assertEqual(640, area.maxY);
+assertTrue(1 == area.minX);
+assertTrue(1 == area.minY);
+assertTrue(480 == area.maxX);
+assertTrue(640 == area.maxY);
 
 function testCanBeCutWithAnArea()
 content = zeros(10, 10);

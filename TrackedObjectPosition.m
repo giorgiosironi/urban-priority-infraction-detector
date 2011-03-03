@@ -1,13 +1,10 @@
 classdef TrackedObjectPosition < handle
     properties
-        areas;
+        patches;
     end
     methods
-        function obj = TrackedObjectPosition(areas)
-            obj.areas = areas;
-        end
-        function d = getDissimilarity(self, anotherObject, strategy)
-           d = strategy.computeDistance(self.areas, anotherObject.areas); 
+        function obj = TrackedObjectPosition(patches)
+            obj.patches = patches;
         end
     end
 end
