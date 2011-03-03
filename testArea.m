@@ -29,6 +29,11 @@ assertEqual([2 1], size(neighbors));
 assertEqual(Area.fromXYtoXY(3, 1, 4, 2), neighbors{1});
 assertEqual(Area.fromXYtoXY(1, 3, 2, 4), neighbors{2});
 
+function testLimitsItsFourConnectedDisplacementOnTheSouthAndEastSidesOfTheImage
+area = Area.fromXYtoXY(1, 1, 2, 2);
+neighbors = area.getNeighbors([2, 2]);
+assertEqual([0], size(neighbors, 1));
+
 function testCutsAnImageOverItsMask
 area = Area.fromXYtoXY(1, 2, 3, 4);
 image = [0 1 1 1; 0 1 1 1; 0 1 1 1; 0 0 0 0];

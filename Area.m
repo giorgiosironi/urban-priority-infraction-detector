@@ -31,8 +31,11 @@ classdef Area < handle
         function area = displace(self, dx, dy)
             area = Area.fromXYtoXY(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
         end
-        function areas = getNeighbors(self)
-            areas = {self.getWestNeighbor(); self.getSouthNeighbor(); self.getEastNeighbor(); self.getNorthNeighbor()}; 
+        function areas = getNeighbors(self, wholeImageSize)
+            if (nargin < 2)
+                wholeImageSize = [10000 10000];
+            end
+            areas = {self.getWestNeighbor(); self.getSouthNeighbor(wholeImageSize(1)); self.getEastNeighbor(wholeImageSize(2)); self.getNorthNeighbor()}; 
             predicate = @(element) element == 0;
             areas(cellfun(predicate, areas)) = [];
         end
@@ -52,12 +55,20 @@ classdef Area < handle
             end
             area = self.displace(0, dy);
         end
-        function area = getSouthNeighbor(self)
+        function area = getSouthNeighbor(self, maximumX)
             dx = int16(self.sizeX());
+            if (dx + self.maxX > maximumX)
+                area = 0;
+                return;
+            end
             area = self.displace(dx, 0);
         end
-        function area = getEastNeighbor(self)
+        function area = getEastNeighbor(self, maximumY)
             dy = int16(self.sizeY());
+            if (dy + self.maxY > maximumY)
+                area = 0;
+                return;
+            end
             area = self.displace(0, dy);
         end
         function area = getNorthNeighbor(self)
