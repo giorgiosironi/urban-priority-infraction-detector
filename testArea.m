@@ -14,11 +14,15 @@ displacedArea = area.displace(100, 200);
 expectedArea = Area.fromXYtoXY(101, 202, 103, 204);
 assertEqual(expectedArea, displacedArea);
 
-function testCreatesTheWestDisplacedVersionOfItself
+function testCreatesTheFourConnectedDisplacedVersionOfItself
 area = Area.fromXYtoXY(101, 3, 102, 4);
-assertEqual(Area.fromXYtoXY(101, 1, 102, 2), area.getWestNeighbor());
+neighbors = area.getNeighbors();
+assertEqual(Area.fromXYtoXY(101, 1, 102, 2), neighbors{1});
+assertEqual(Area.fromXYtoXY(103, 3, 104, 4), neighbors{2});
+assertEqual(Area.fromXYtoXY(101, 5, 102, 6), neighbors{3});
+assertEqual(Area.fromXYtoXY(99, 3, 100, 4), neighbors{4});
 
-function testCutsAnImageOVerItsMask
+function testCutsAnImageOverItsMask
 area = Area.fromXYtoXY(1, 2, 3, 4);
 image = [0 1 1 1; 0 1 1 1; 0 1 1 1; 0 0 0 0];
 cut = area.cut(image);

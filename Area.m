@@ -31,9 +31,30 @@ classdef Area < handle
         function area = displace(self, dx, dy)
             area = Area.fromXYtoXY(int16(self.minX) + dx, int16(self.minY) + dy, int16(self.maxX) + dx, int16(self.maxY) + dy);
         end
+        function areas = getNeighbors(self)
+            areas = {self.getWestNeighbor(); self.getSouthNeighbor(); self.getEastNeighbor(); self.getNorthNeighbor()}; 
+        end
         function area = getWestNeighbor(self)
-            dy = - int16(self.maxY - self.minY + 1);
+            dy = - int16(self.sizeY());
             area = self.displace(0, dy);
+        end
+        function area = getSouthNeighbor(self)
+            dx = int16(self.sizeX());
+            area = self.displace(dx, 0);
+        end
+        function area = getEastNeighbor(self)
+            dy = int16(self.sizeY());
+            area = self.displace(0, dy);
+        end
+        function area = getNorthNeighbor(self)
+            dx = - int16(self.sizeX());
+            area = self.displace(dx, 0);
+        end
+        function s = sizeX(self)
+            s = self.maxX - self.minX + 1;
+        end
+        function s = sizeY(self)
+            s = self.maxY - self.minY + 1;
         end
         function imageData = cut(self, image)
             imageData = image(self.minX:self.maxX, self.minY:self.maxY);
