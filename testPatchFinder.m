@@ -32,3 +32,17 @@ positionOfMinimum = find(voteMap.distances == 0);
 assertEqual([1 1], size(positionOfMinimum));
 assertTrue(positionOfMinimum > 0);
 assertEqual([2 3], voteMap.offsets(positionOfMinimum, :));
+
+function testIgnoresPatchesWhichAtLeastOneDisplacementWouldPutOutOfTheImage
+finder = PatchFinder(3, 3, SimpleComparator());
+histogramFactory = IntegralHistogramFactory(GrayHistogramStrategy(2));
+
+patch = Patch(NaN, Area.fromXYtoXY(18, 18, 19, 19));
+nextFrame = zeros(20, 20);
+histograms = histogramFactory.buildFromImage(nextFrame);
+assertEqual(false, finder.search(patch, histograms));
+
+patch = Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2));
+nextFrame = zeros(20, 20);
+histograms = histogramFactory.buildFromImage(nextFrame);
+assertEqual(false, finder.search(patch, histograms));

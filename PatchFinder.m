@@ -13,6 +13,10 @@ classdef PatchFinder < handle
     end
     methods
         function voteMap = search(self, patch, histograms)
+            if (self.isNotDisplaceable(patch.area, histograms.size()))
+                voteMap = false;
+                return
+            end
             voteMap = VoteMap();
             for dx=-1*self.maximumDx:self.maximumDx
                 for dy=-1*self.maximumDy:self.maximumDy
@@ -21,6 +25,23 @@ classdef PatchFinder < handle
                     d = patch.histogram.getDistance(candidateHistogram, self.comparator);
                     voteMap.vote(dx, dy, d);
                 end
+            end
+        end
+    end
+    methods(Access=private)
+        function b = isNotDisplaceable(self, area, imageSize)
+            b = false;
+            if (area.minX - self.maximumDx < 1)
+                b = true;
+            end
+            if (area.minY - self.maximumDy < 1)
+                b = true;
+            end
+            if (area.maxX + self.maximumDx > imageSize(1))
+                b = true;
+            end
+            if (area.maxY+ self.maximumDy > imageSize(2))
+                b = true;
             end
         end
     end
