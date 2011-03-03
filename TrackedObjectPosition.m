@@ -18,5 +18,8 @@ classdef TrackedObjectPosition < handle
             end
             newPosition = TrackedObjectPosition(newPatches);
         end
+        function newPosition = addPatches(self, patches)
+            newPosition = TrackedObjectPosition([self.patches; patches]);
+        end
     end
 end
