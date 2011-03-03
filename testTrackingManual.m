@@ -2,7 +2,7 @@ L = 100;
 remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 32), ForegroundHistogramStrategy(), 50, LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
-patchFinder = PatchFinder(15, 15, SimpleComparator());
+patchFinder = PatchFinder(30, 30, SimpleComparator());
 matcher = ObjectMatcher(CornersObjectDistanceStrategy());
 
 video = zeros(480, 640, 1, L);
@@ -33,12 +33,16 @@ thirdFrameHistograms = factory.buildFromImage(frames{3}.content);
 objects = finder.findIn(Frame(video(:, :, 1, 50)), firstFrameHistograms);
 sprintf('Objects found: %d', size(objects, 1))
 
-for i=1:1%size(objects, 1)
+'Looking in 2nd frame'
+for i=1:size(objects, 1)
     patches = objects{i}.patches;
     voteMaps = cell(0);
     sprintf('Object %d with %d patches', i, size(patches, 1))
     for j=1:size(patches, 1)
-        voteMaps = [voteMaps; {patchFinder.search(patches{j}, secondFrameHistograms)}];
+        map = patchFinder.search(patches{j}, secondFrameHistograms);
+        if (map ~= false)
+            voteMaps = [voteMaps; {map}];
+        end
     end
     map = VoteMap.combine(voteMaps, VoteMapPercentileStrategy(25));
     [distances, indexes] = sort(map.distances, 'ascend');
@@ -48,15 +52,17 @@ for i=1:1%size(objects, 1)
     objects{i} = objects{i}.move(dx, dy);
 end
 
-'Looking now in 2nd frame'
-for i=1:1%size(objects, 1)
+'Looking now in 3rd frame'
+for i=1:size(objects, 1)
     patches = objects{i}.patches;
     voteMaps = cell(0);
     sprintf('Object %d with %d patches', i, size(patches, 1))
     for j=1:size(patches, 1)
-        voteMaps = [voteMaps; {patchFinder.search(patches{j}, thirdFrameHistograms)}];
+        map = patchFinder.search(patches{j}, thirdFrameHistograms);
+        if (map ~= false)
+            voteMaps = [voteMaps; {map}];
+        end
     end
-    size(voteMaps)
     map = VoteMap.combine(voteMaps, VoteMapPercentileStrategy(25));
     [distances, indexes] = sort(map.distances, 'ascend');
     offsets = map.offsets(indexes(1), :)
