@@ -1,6 +1,6 @@
 L = 100;
 remover = BackgroundRemover(10, -1);
-finder = ObjectFinder(PatchesSelector(24, 32), ForegroundHistogramStrategy(), 50, LabelsContainerFactory());
+finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
 patchFinder = PatchFinder(30, 30, SimpleComparator());
 matcher = ObjectMatcher(CornersObjectDistanceStrategy());
@@ -30,7 +30,7 @@ secondFrameHistograms = factory.buildFromImage(frames{2}.content);
 thirdFrameHistograms = factory.buildFromImage(frames{3}.content);
 'Finished integral histogram of 3rd frame'
 
-objects = finder.findIn(Frame(video(:, :, 1, 50)), firstFrameHistograms);
+objects = finder.findInForeground(Frame(video(:, :, 1, 50)), firstFrameHistograms);
 sprintf('Objects found: %d', size(objects, 1))
 
 'Looking in 2nd frame'

@@ -1,32 +1,30 @@
 classdef ObjectFinder < handle
     properties(SetAccess=private)
         areaGroupSelector;
-        foregroundHistogramStrategy;
-        backgroundThreshold;
+        foregroundValidityStrategy;
         labelsContainerFactory;
     end
     methods
-        function obj = ObjectFinder(areaGroupSelector, foregroundHistogramStrategy, backgroundThreshold, labelsContainerFactory)
+        function obj = ObjectFinder(areaGroupSelector, foregroundValidityStrategy, labelsContainerFactory)
             obj.areaGroupSelector = areaGroupSelector;
-            obj.foregroundHistogramStrategy = foregroundHistogramStrategy;
-            obj.backgroundThreshold = backgroundThreshold;
+            obj.foregroundValidityStrategy = foregroundValidityStrategy;
             obj.labelsContainerFactory = labelsContainerFactory;
         end
-        function objects = findIn(self, frame, integralHistogram)
+        function objects = findInForeground(self, frame, integralHistogram)
             areaGroup = self.areaGroupSelector.getAreaGroup(frame.getArea());
-            histograms = self.getForegroundAreas(frame, areaGroup);
-            sizeOfGroup = size(histograms);
+            foregroundAreas = self.getForegroundAreas(frame, areaGroup);
+            sizeOfGroup = areaGroup.size();
             labels = self.labelsContainerFactory.createContainer(sizeOfGroup(1), sizeOfGroup(2));
             for x=1:sizeOfGroup(1)
                 for y=1:sizeOfGroup(2)
-                    if (isempty(histograms{x, y}))
+                    if (foregroundAreas(x, y) == 0)
                         continue;
                     end
                     westX = x;
                     westY = y-1;
                     northX = x-1;
                     northY = y;
-                    if (self.isValid(histograms, westX, westY) && self.isValid(histograms, northX, northY))
+                    if (self.isValid(foregroundAreas, westX, westY) && self.isValid(foregroundAreas, northX, northY))
                         firstLabel = labels.at(westX, westY);
                         secondLabel = labels.at(northX, northY);
                         if (firstLabel ~= secondLabel) 
@@ -35,9 +33,9 @@ classdef ObjectFinder < handle
                         else 
                             labels.label(x, y, firstLabel);
                         end
-                    elseif (self.isValid(histograms, westX, westY))
+                    elseif (self.isValid(foregroundAreas, westX, westY))
                         labels.label(x, y, labels.at(westX, westY));
-                    elseif (self.isValid(histograms, northX, northY))
+                    elseif (self.isValid(foregroundAreas, northX, northY))
                         labels.label(x, y, labels.at(northX, northY));
                     else
                         labels.label(x, y, labels.newLabel());
@@ -48,37 +46,37 @@ classdef ObjectFinder < handle
         end
     end
     methods(Access=private)
-        function histograms = getForegroundAreas(self, frame, areaGroup)
+        function foregroundAreas = getForegroundAreas(self, frame, areaGroup)
             sizeOfGroup = areaGroup.size();
-            histograms = cell(sizeOfGroup);
+            foregroundAreas = zeros(sizeOfGroup);
             for x=1:sizeOfGroup(1)
                 for y=1:sizeOfGroup(2)
-                    patch = frame.cut(areaGroup.at(x, y));
-                    histogram = self.foregroundHistogramStrategy.fromPixelData(patch);
-                    if (histogram.isValid(self.backgroundThreshold))
-                        histograms{x, y} = histogram;
+                    area = areaGroup.at(x, y);
+                    image = frame.cut(area);
+                    if (self.foregroundValidityStrategy.isValid(image))
+                        foregroundAreas(x, y) = 1;
                     end
                 end
             end
         end
-        function b = isValid(self, histograms, x, y)
+        function b = isValid(self, foregroundAreas, x, y)
             if (x <= 0|| y <= 0)
-                b = 0;
+                b = false;
                 return;
             end
-            b = ~isempty(histograms{x, y});
+            b = foregroundAreas(x, y);
         end
-        function objects = extractObjectsBySameLabel(self, labelsContainer, areaGroup, histograms)
+        function objects = extractObjectsBySameLabel(self, labelsContainer, areaGroup, integralHistogram)
             labels = labelsContainer.getLabels();
             objects = cell(0);
             for i=1:size(labels, 1)
                 positions = labels{i};
                 patches = cell(0);
                 for j=1:size(positions, 1)
-                    x = positions(j, 1); %JJJJJ
-                    y = positions(j, 2); % JJJJ
+                    x = positions(j, 1);
+                    y = positions(j, 2);
                     area = areaGroup.at(x, y);
-                    histogram = histograms.getHistogram(area);
+                    histogram = integralHistogram.getHistogram(area);
                     patches = [patches; {Patch(histogram, area)}];
                 end
                 if (size(patches, 1) > 0)
