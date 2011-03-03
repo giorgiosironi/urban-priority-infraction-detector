@@ -18,5 +18,9 @@ classdef IntegralHistogram < handle
             bins = bottomRight + topLeft - topRight - bottomLeft;
             H = self.strategy.fromBinsData(squeeze(bins));
         end
+        function s = size(self)
+            s = size(self.content);
+            s = s(1:2);
+        end
     end
 end
