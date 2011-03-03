@@ -4,11 +4,12 @@ classdef TrackedObjectPosition < handle
     end
     methods
         function obj = TrackedObjectPosition(patches)
+            assert(1 == size(patches, 2));
             obj.patches = patches;
         end
         function newPosition = move(self, dx, dy)
             newPatches = cell(0);
-            for i=size(self.patches, 1)
+            for i=1:size(self.patches, 1)
                 patch = self.patches{i};
                 oldHistogram = patch.histogram;
                 newArea = patch.area.displace(dx, dy);
