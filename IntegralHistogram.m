@@ -11,11 +11,16 @@ classdef IntegralHistogram < handle
             obj.strategy = strategy;
         end
         function H = getHistogram(self, area)
-            bottomRight = self.content(area.maxX, area.maxY, :);
-            topLeft = self.content(area.minX - 1, area.minY - 1, :);
-            topRight = self.content(area.minX - 1, area.maxY, :);
-            bottomLeft = self.content(area.maxX, area.minY - 1, :);
-            bins = bottomRight + topLeft - topRight - bottomLeft;
+            bins = self.content(area.maxX, area.maxY, :);
+            if (area.minX > 1 && area.minY > 1)
+                bins = bins + self.content(area.minX - 1, area.minY - 1, :);
+            end
+            if (area.minX > 1)
+                bins = bins - self.content(area.minX - 1, area.maxY, :);
+            end
+            if (area.minY > 1)
+                bins = bins - self.content(area.maxX, area.minY - 1, :);
+            end
             H = self.strategy.fromBinsData(squeeze(bins));
         end
         function s = size(self)
