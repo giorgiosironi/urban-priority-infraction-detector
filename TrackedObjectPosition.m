@@ -5,6 +5,7 @@ classdef TrackedObjectPosition < handle
     methods
         function obj = TrackedObjectPosition(patches)
             assert(1 == size(patches, 2));
+            assert(size(patches, 1) > 0);
             obj.patches = patches;
         end
         function newPosition = move(self, dx, dy)

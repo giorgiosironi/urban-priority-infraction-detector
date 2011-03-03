@@ -15,7 +15,7 @@ classdef PatchFinder < handle
         function voteMap = search(self, patch, histograms)
             if (self.isNotDisplaceable(patch.area, histograms.size()))
                 voteMap = false;
-                return
+                return;
             end
             voteMap = VoteMap();
             for dx=-1*self.maximumDx:self.maximumDx

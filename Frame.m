@@ -4,6 +4,8 @@ classdef Frame < handle
     end
     methods
         function obj = Frame(content)
+            assert(size(content, 1) > 0);
+            assert(size(content, 2) > 0);
             obj.content = content;
         end
         function area = getArea(self)

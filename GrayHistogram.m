@@ -5,6 +5,7 @@ classdef GrayHistogram < handle
     methods
         function obj = GrayHistogram(bins)
             if (nargin > 0)
+                assert(1 == size(bins, 2))
                 obj.bins = bins;
             end
         end
