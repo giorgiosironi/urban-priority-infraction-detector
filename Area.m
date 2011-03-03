@@ -38,5 +38,8 @@ classdef Area < handle
         function imageData = cut(self, image)
             imageData = image(self.minX:self.maxX, self.minY:self.maxY);
         end
+        function b = equals(self, another)
+            b = self.minX == another.minX && self.minY == another.minY && self.maxX == another.maxX && self.maxY == another.maxY;
+        end
     end
 end

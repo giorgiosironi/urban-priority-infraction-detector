@@ -8,5 +8,8 @@ classdef Patch < handle
             obj.histogram = histogram;
             obj.area = area;
         end
+        function b = coversSameAs(self, anotherPatch)
+            b = self.area.equals(anotherPatch.area);
+        end
     end
 end

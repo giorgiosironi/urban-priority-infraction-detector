@@ -19,7 +19,21 @@ classdef TrackedObjectPosition < handle
             newPosition = TrackedObjectPosition(newPatches);
         end
         function newPosition = addPatches(self, patches)
-            newPosition = TrackedObjectPosition([self.patches; patches]);
+            newPosition = TrackedObjectPosition.withoutDuplicates([self.patches; patches]);
+        end
+    end
+    methods(Static)
+        function position = withoutDuplicates(patches)
+            toDelete = [];
+            for i=1:size(patches, 1)
+                for j=i+1:size(patches, 1)
+                    if (patches{i}.coversSameAs(patches{j})) 
+                        toDelete = [toDelete; j];
+                    end
+                end
+            end
+            patches(toDelete) = [];
+            position = TrackedObjectPosition(patches);
         end
     end
 end
