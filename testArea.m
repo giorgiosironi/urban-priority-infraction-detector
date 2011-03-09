@@ -58,3 +58,9 @@ assertFalse(area.collidesWith(Area.fromXYtoXY(1, 1, 12, 30)));
 intersectingArea = Area.fromXYtoXY(18, 35, 26, 37);
 assertTrue(area.collidesWith(intersectingArea));
 assertTrue(intersectingArea.collidesWith(area));
+
+function testDetectsContainmentOfAnotherArea
+area = Area.fromXYtoXY(1, 5, 4, 10);
+assertTrue(area.contains(Area.fromXYtoXY(2, 5, 4, 9)));
+assertFalse(area.contains(Area.fromXYtoXY(1, 4, 4, 10)));
+assertFalse(area.contains(Area.fromXYtoXY(1, 5, 4, 12)));

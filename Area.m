@@ -67,6 +67,9 @@ classdef Area < handle
                 end
             end
         end
+        function b = contains(self, anotherArea)
+            b = anotherArea.minX >= self.minX && anotherArea.minY >= self.minY && anotherArea.maxX <= self.maxX && anotherArea.maxY <= self.maxY;
+        end
     end
     methods(Access=private)
         function b = hasPoint(self, x, y)
