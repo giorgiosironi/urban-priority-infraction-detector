@@ -23,6 +23,9 @@ classdef Area < handle
         function area = fromXYtoXY(x1, y1, x2, y2)
             area = Area(int16(x1), int16(y1), int16(x2), int16(y2));
         end
+        function area = fromDimensions(x, y)
+            area = Area(int16(1), int16(1), int16(x), int16(y));
+        end
     end
     methods
         function c = getCentroid(self)
@@ -30,9 +33,6 @@ classdef Area < handle
         end
         function area = displace(self, dx, dy)
             area = Area(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
-        end
-        function b = isValidInImage(self, limits)
-            b = self.minX >= 1 && self.minY >= 1 && self.maxX <= limits(1) && self.maxY <= limits(2);
         end
         function areas = getNeighbors(self, wholeImageSize)
             if (nargin < 2)

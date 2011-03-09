@@ -12,12 +12,13 @@ classdef TrackedObjectPosition < handle
             if (nargin == 3)
                 limits = [10000 10000];
             end
+            imageArea = Area.fromDimensions(limits(1), limits(2));
             newPatches = cell(0);
             for i=1:size(self.patches, 1)
                 patch = self.patches{i};
                 oldHistogram = patch.histogram;
                 newArea = patch.area.displace(dx, dy);
-                if (newArea.isValidInImage(limits))
+                if (newArea.collidesWith(imageArea))
                     newPatches = [newPatches; {Patch(oldHistogram, newArea)}];
                 end
             end
