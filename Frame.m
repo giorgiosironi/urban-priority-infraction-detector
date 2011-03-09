@@ -15,6 +15,16 @@ classdef Frame < handle
         function result = cut(self, area)
             result = area.cut(self.content);
         end
+        function frame = removeObjects(self, objects)
+            content = self.content;
+            for i=1:size(objects, 1)
+                for j=1:size(objects{i}.patches)
+                    area = objects{i}.patches{j}.area;
+                    content(area.minX:area.maxX, area.minY:area.maxY) = -1;
+                end
+            end
+            frame = Frame(content);
+        end
     end
     methods(Static)
         function frame = fromFile(path)

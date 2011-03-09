@@ -20,3 +20,8 @@ content(5, 6) = 1;
 frame = Frame(content);
 result = frame.cut(Area.fromXYtoXY(5, 6, 5, 6));
 assertEqual(1, result);
+
+function testRemovesObjectsFromItself()
+frame = Frame(zeros(10, 10));
+frame = frame.removeObjects({TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))})});
+assertEqual([-1 -1 ; -1 -1], frame.content(1:2, 3:4));
