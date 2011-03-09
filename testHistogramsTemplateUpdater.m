@@ -25,3 +25,12 @@ newHistograms = histogramFactory.buildFromImage(nextFrame);
 newObject = updater.updateTemplate(movedObject, newHistograms);
 assertEqual(Area.fromXYtoXY(10, 10, 12, 12), newObject.patches{1}.area);
 assertEqual(GrayHistogram([1; 0]), newObject.patches{1}.histogram);
+
+function testDoesNotUpdatePatchesWhichAreNotCompletelyContainedInTheImage(histogramFactory)
+movedObject = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(10, 10, 12, 12))});
+nextFrame = zeros(10, 10); 
+newHistograms = histogramFactory.buildFromImage(nextFrame);
+
+updater = HistogramsTemplateUpdater(AlwaysUpdatedAcceptanceStrategy());
+newObject = updater.updateTemplate(movedObject, newHistograms);
+assertEqual([1 1], size(newObject.patches));
