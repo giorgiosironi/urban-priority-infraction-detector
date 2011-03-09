@@ -10,6 +10,10 @@ classdef HistogramsTemplateUpdater < handle
             newPatches = cell(0);
             for i=1:size(object.patches, 1)
                 oldPatch = object.patches{i};
+                if (~histograms.getImageArea().contains(oldPatch.area))
+                    newPatches = [newPatches; {oldPatch}];
+                    continue;
+                end
                 oldHistogram = oldPatch.histogram;
                 newHistogram = histograms.getHistogram(oldPatch.area);
                 if (self.acceptanceStrategy.isTransitionAcceptable(oldHistogram, newHistogram))
