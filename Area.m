@@ -7,21 +7,21 @@ classdef Area < handle
     end
     methods(Access=private)
         function obj = Area(minX, minY, maxX, maxY)
-            obj.minX = int16(minX);
-            obj.minY = int16(minY);
+            obj.minX = minX;
+            obj.minY = minY;
             if (maxX < minX)
                 error(sprintf('maxX=%d is less than minX=%d', maxX, minX));
             end
-            obj.maxX = int16(maxX);
+            obj.maxX = maxX;
             if (maxX < minX)
                 error(sprintf('maxY=%d is less than minY=%d', maxY, minY));
             end
-            obj.maxY = int16(maxY);
+            obj.maxY = maxY;
         end
     end
     methods(Static)
         function area = fromXYtoXY(x1, y1, x2, y2)
-            area = Area(x1, y1, x2, y2);
+            area = Area(int16(x1), int16(y1), int16(x2), int16(y2));
         end
     end
     methods
@@ -29,7 +29,7 @@ classdef Area < handle
             c = [(self.minX + self.maxX) / 2, (self.minY + self.maxY) / 2];
         end
         function area = displace(self, dx, dy)
-            area = Area.fromXYtoXY(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
+            area = Area(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
         end
         function areas = getNeighbors(self, wholeImageSize)
             if (nargin < 2)

@@ -21,7 +21,9 @@ classdef IntegralHistogram < handle
             if (area.minY > 1)
                 bins = bins - self.content(area.maxX, area.minY - 1, :);
             end
-            H = self.strategy.fromBinsData(squeeze(bins));
+%            binsSize = size(bins);
+%            newBins = zeros(binsSize(3));
+            H = self.strategy.fromBinsData(bins(:));
         end
         function s = size(self)
             s = size(self.content);
