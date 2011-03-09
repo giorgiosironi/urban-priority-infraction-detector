@@ -64,3 +64,7 @@ area = Area.fromXYtoXY(1, 5, 4, 10);
 assertTrue(area.contains(Area.fromXYtoXY(2, 5, 4, 9)));
 assertFalse(area.contains(Area.fromXYtoXY(1, 4, 4, 10)));
 assertFalse(area.contains(Area.fromXYtoXY(1, 5, 4, 12)));
+
+function testLimitsItselfToAPredefinedMaximumArea
+area = Area.fromXYtoXY(-1, 1, 20, 10000);
+assertEqual(Area.fromXYtoXY(1, 1, 20, 640), area.limit(Area.fromDimensions(480, 640)));

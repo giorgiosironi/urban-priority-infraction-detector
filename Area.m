@@ -70,6 +70,13 @@ classdef Area < handle
         function b = contains(self, anotherArea)
             b = anotherArea.minX >= self.minX && anotherArea.minY >= self.minY && anotherArea.maxX <= self.maxX && anotherArea.maxY <= self.maxY;
         end
+        function a = limit(self, containerArea)
+            minX = max(self.minX, containerArea.minX);
+            minY = max(self.minY, containerArea.minY);
+            maxX = min(self.maxX, containerArea.maxX);
+            maxY = min(self.maxY, containerArea.maxY);
+            a = Area.fromXYtoXY(minX, minY, maxX, maxY);
+        end
     end
     methods(Access=private)
         function b = hasPoint(self, x, y)
