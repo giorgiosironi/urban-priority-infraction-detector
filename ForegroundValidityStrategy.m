@@ -12,7 +12,8 @@ classdef ForegroundValidityStrategy < handle
             end
             backgroundCount = double(sum(sum(imagePortion < 0)));
             totalCount = double(size(imagePortion, 1) * size(imagePortion, 2));
-            b = backgroundCount / totalCount * 100 < self.backgroundThreshold;
+            percentualOfBg = backgroundCount / totalCount * 100;
+            b = percentualOfBg < self.backgroundThreshold;
         end
     end
 end
