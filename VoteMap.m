@@ -19,6 +19,10 @@ classdef VoteMap < handle
     end
     methods(Static)
         function totalMap = combine(maps, combinationStrategy)
+            if (size(maps, 1) == 1)
+                totalMap = maps{1};
+                return;
+            end
             offsets = maps{1}.offsets;
             distancesPerOffset = zeros(size(maps{1}.distances));
             for j=1:size(offsets, 1)
