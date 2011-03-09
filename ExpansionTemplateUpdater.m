@@ -21,6 +21,7 @@ classdef ExpansionTemplateUpdater
                                 if (l ~= i && objects{l}.collidesWith(candidateArea))
                                     % we look in old objects
                                     % should suffice as new patches are only the ones entering the frame
+                                    % is not sufficient: we must look at new objects also
                                     inAnotherObject = true;
                                 end
                             end
@@ -38,6 +39,7 @@ classdef ExpansionTemplateUpdater
                 for j=1:size(newObjects)
                     if (newObjects{j}.collidesWithObject(detectedObjects{i}))
                         isNew = false;
+                        sprintf('new object %d collides with object %d', j, i)
                     end
                 end
                 if (isNew)
