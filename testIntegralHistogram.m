@@ -6,9 +6,10 @@ integralH = getSampleCumulativeHistogram();
 H = integralH.getHistogram(Area.fromXYtoXY(2, 2, 3, 3));
 assertEqual(GrayHistogram([25; 25]), H);
 
-function testOverridesSize
+function testOverridesSizeAndProducesAnArea
 integralH = getSampleCumulativeHistogram();
 assertEqual([3 3], integralH.size());
+assertEqual(Area.fromDimensions(3, 3), integralH.getImageArea());
 
 function testProvidesHistogramAlsoOfPatchesInTheTopMostAndLeftMostRegion
 integralH = getSampleCumulativeHistogram();

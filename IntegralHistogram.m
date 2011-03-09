@@ -29,5 +29,8 @@ classdef IntegralHistogram < handle
             s = size(self.content);
             s = s(1:2);
         end
+        function a = getImageArea(self)
+            a = Area.fromDimensions(size(self.content, 1), size(self.content, 2));
+        end
     end
 end
