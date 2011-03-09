@@ -14,6 +14,16 @@ displacedArea = area.displace(100, 200);
 expectedArea = Area.fromXYtoXY(101, 202, 103, 204);
 assertEqual(expectedArea, displacedArea);
 
+function testItsValidityGivenAnImageSize
+a = Area.fromXYtoXY(1, 2, 3, 4);
+assertTrue(a.isValidInImage([10 10]));
+assertFalse(a.isValidInImage([10 3]));
+assertFalse(a.isValidInImage([1 10]));
+a = Area.fromXYtoXY(-1, 2, 3, 4);
+assertFalse(a.isValidInImage([10 10]));
+a = Area.fromXYtoXY(1, -2, 3, 4);
+assertFalse(a.isValidInImage([10 10]));
+
 function testCreatesTheFourConnectedDisplacedVersionOfItself
 area = Area.fromXYtoXY(101, 3, 102, 4);
 neighbors = area.getNeighbors();

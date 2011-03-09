@@ -31,6 +31,9 @@ classdef Area < handle
         function area = displace(self, dx, dy)
             area = Area(self.minX + dx, self.minY + dy, self.maxX + dx, self.maxY + dy);
         end
+        function b = isValidInImage(self, limits)
+            b = self.minX >= 1 && self.minY >= 1 && self.maxX <= limits(1) && self.maxY <= limits(2);
+        end
         function areas = getNeighbors(self, wholeImageSize)
             if (nargin < 2)
                 wholeImageSize = [10000 10000];

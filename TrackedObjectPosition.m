@@ -8,13 +8,18 @@ classdef TrackedObjectPosition < handle
             assert(size(patches, 1) > 0);
             obj.patches = patches;
         end
-        function newPosition = move(self, dx, dy)
+        function newPosition = move(self, dx, dy, limits)
+            if (nargin == 3)
+                limits = [10000 10000];
+            end
             newPatches = cell(0);
             for i=1:size(self.patches, 1)
                 patch = self.patches{i};
                 oldHistogram = patch.histogram;
                 newArea = patch.area.displace(dx, dy);
-                newPatches = [newPatches; {Patch(oldHistogram, newArea)}];
+                if (newArea.isValidInImage(limits))
+                    newPatches = [newPatches; {Patch(oldHistogram, newArea)}];
+                end
             end
             newPosition = TrackedObjectPosition(newPatches);
         end
