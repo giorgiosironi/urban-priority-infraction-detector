@@ -8,9 +8,8 @@ classdef Frame < handle
             assert(size(content, 2) > 0);
             obj.content = content;
         end
-        function area = getArea(self)
-            dimensions = size(self.content);
-            area = Area.fromXYtoXY(1, 1, dimensions(1), dimensions(2));
+        function a = getArea(self)
+            a = Area.fromDimensions(size(self.content, 1), size(self.content, 2));
         end
         function result = cut(self, area)
             result = area.cut(self.content);
@@ -19,7 +18,7 @@ classdef Frame < handle
             content = self.content;
             for i=1:size(objects, 1)
                 for j=1:size(objects{i}.patches)
-                    area = objects{i}.patches{j}.area;
+                    area = objects{i}.patches{j}.area.limit(self.getArea());
                     content(area.minX:area.maxX, area.minY:area.maxY) = -1;
                 end
             end
