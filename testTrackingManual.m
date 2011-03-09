@@ -54,7 +54,7 @@ for i=1:size(objects, 1)
     objects{i} = objects{i}.move(dx, dy);
     objects{i} = templateUpdater.updateTemplate(objects{i}, secondFrameHistograms);
 end
-expansionUpdater.updateTemplate(objects, Frame(video(:, :, :, 51)), secondFrameHistograms);
+expansionUpdater.updateTemplate(objects, Frame(video(:, :, :, 51)), secondFrameHistograms, {});
 
 'Looking now in 3rd frame'
 for i=1:size(objects, 1)

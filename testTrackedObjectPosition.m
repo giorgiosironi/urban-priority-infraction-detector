@@ -24,3 +24,9 @@ function testCollidesWithAnAreaIfOneOfItsAreasCollideWithIt
 position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2)); Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))});
 assertTrue(position.collidesWith(Area.fromXYtoXY(2, 3, 3, 4)));
 assertFalse(position.collidesWith(Area.fromXYtoXY(3, 3, 4, 4)));
+
+function testCollidesWithAnotherObjectIfOneOfItsAreasCollideWithIt
+position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2)); Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))});
+assertTrue(position.collidesWithObject(position));
+assertTrue(position.collidesWithObject(TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 2, 3, 4))})));
+assertFalse(position.collidesWithObject(TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(10, 10, 12, 12))})));
