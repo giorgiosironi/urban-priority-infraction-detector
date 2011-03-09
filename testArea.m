@@ -34,6 +34,11 @@ area = Area.fromXYtoXY(1, 1, 2, 2);
 neighbors = area.getNeighbors([2, 2]);
 assertEqual([0], size(neighbors, 1));
 
+function testLimitsTheFourConnectedDisplacementOfAnAreaToValidOverallAreasWhichAreStrictlyContainedInTheFrame
+area = Area.fromXYtoXY(2, 1, 3, 2);
+neighbors = area.getNeighbors([2, 10]);
+assertEqual([0], size(neighbors, 1));
+
 function testCutsAnImageOverItsMask
 area = Area.fromXYtoXY(1, 2, 3, 4);
 image = [0 1 1 1; 0 1 1 1; 0 1 1 1; 0 0 0 0];

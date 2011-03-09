@@ -38,8 +38,9 @@ classdef Area < handle
             if (nargin < 2)
                 wholeImageSize = [10000 10000];
             end
-            areas = {self.getWestNeighbor(); self.getSouthNeighbor(wholeImageSize(1)); self.getEastNeighbor(wholeImageSize(2)); self.getNorthNeighbor()}; 
-            predicate = @(element) element == 0;
+            image = Area.fromDimensions(wholeImageSize(1), wholeImageSize(2));
+            areas = {self.getWestNeighbor(); self.getSouthNeighbor(); self.getEastNeighbor(); self.getNorthNeighbor()}; 
+            predicate = @(element) ~image.contains(element);
             areas(cellfun(predicate, areas)) = [];
         end
         function imageData = cut(self, image)
@@ -84,34 +85,18 @@ classdef Area < handle
         end
         function area = getWestNeighbor(self)
             dy = - int16(self.sizeY());
-            if (dy + self.minY < 1)
-                area = 0;
-                return;
-            end
             area = self.displace(0, dy);
         end
-        function area = getSouthNeighbor(self, maximumX)
+        function area = getSouthNeighbor(self)
             dx = int16(self.sizeX());
-            if (dx + self.maxX > maximumX)
-                area = 0;
-                return;
-            end
             area = self.displace(dx, 0);
         end
-        function area = getEastNeighbor(self, maximumY)
+        function area = getEastNeighbor(self)
             dy = int16(self.sizeY());
-            if (dy + self.maxY > maximumY)
-                area = 0;
-                return;
-            end
             area = self.displace(0, dy);
         end
         function area = getNorthNeighbor(self)
             dx = - int16(self.sizeX());
-            if (dx + self.minX < 1)
-                area = 0;
-                return;
-            end
             area = self.displace(dx, 0);
         end
         function s = sizeX(self)
