@@ -12,6 +12,17 @@ classdef Object < handle
             self.positions = [self.positions; {position.getAreas()}];
             self.frames = [self.frames; frame];
         end
+        function b = passedFrom(self, area)
+            b = false;
+            for i=1:size(self.frames, 1)
+                positions = self.positions{i};
+                for j=1:size(positions, 1)
+                    if (positions{j}.collidesWith(area))
+                        b = true;
+                    end
+                end
+            end
+        end
     end
     methods(Static)
         function o = fromKnownPosition(position, frame)
