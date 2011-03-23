@@ -55,7 +55,7 @@ classdef Area < handle
             for i=1:4
                 x = anotherFourCorners(i, 1);
                 y = anotherFourCorners(i, 2);
-                if (self.hasPoint(x, y))
+                if (self.expand(1).hasPoint(x, y))
                     b = true;
                 end
             end
@@ -63,7 +63,7 @@ classdef Area < handle
             for i=1:4
                 x = selfFourCorners(i, 1);
                 y = selfFourCorners(i, 2);
-                if (another.hasPoint(x, y))
+                if (another.expand(1).hasPoint(x, y))
                     b = true;
                 end
             end
@@ -107,6 +107,9 @@ classdef Area < handle
         end
         function fourCorners = getFourCorners(self)
             fourCorners = [self.minX self.minY; self.minX self.maxY; self.maxX self.minY; self.maxX self.maxY];
+        end
+        function a = expand(self, length)
+            a = Area.fromXYtoXY(self.minX - length, self.minY - length, self.maxX + length, self.maxY + length);
         end
     end
 end
