@@ -3,7 +3,6 @@ remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 16), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
 patchFinder = PatchFinder(30, 30, 4, SimpleComparator());
-matcher = ObjectMatcher(CornersObjectDistanceStrategy());
 templateUpdater = HistogramsTemplateUpdater(MaximumDistanceAcceptanceStrategy(SimpleComparator(), 0.1));
 expansionUpdater = ExpansionTemplateUpdater(ForegroundValidityStrategy(10));
 

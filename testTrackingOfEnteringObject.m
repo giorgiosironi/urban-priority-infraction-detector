@@ -4,12 +4,12 @@ remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
 patchFinder = PatchFinder(30, 30, 4, SimpleComparator());
-matcher = ObjectMatcher(CornersObjectDistanceStrategy());
 templateUpdater = HistogramsTemplateUpdater(MaximumDistanceAcceptanceStrategy(SimpleComparator(), 0.1));
 expansionUpdater = ExpansionTemplateUpdater(ForegroundValidityStrategy(50));
 markers = 'ox+.*sd<>v^ph';
 startFrameNumber = 1350;
 %startFrameNumber = 832;
+repository = ObjectRepository();
 
 frames = cell(L, 1);
 video = zeros(480, 640, 1, L);
@@ -32,6 +32,7 @@ sprintf('Objects found: %d', size(objectPositions, 1))
 figure;
 imshow(frames{1}.content);
 plotObjects(objectPositions, markers, 'r');
+repository.initializeObjects(objectPositions, 1);
 
 for k=2:LTracking
     sprintf('Looking in %d frame', k)
@@ -63,10 +64,12 @@ for k=2:LTracking
     nextFrame = nextFrame.removeObjects(objectPositions);
     newlyDetectedObjects = finder.findInForeground(nextFrame, integralHistograms{1});
 %    nextFrame = nextFrame.removeObjects(newlyDetectedObjects);
-    objectPositions = expansionUpdater.updateTemplate(objectPositions, nextFrame, integralHistograms{k}, newlyDetectedObjects);
+    newObjectPositions = expansionUpdater.updateTemplate(objectPositions, nextFrame, integralHistograms{k}, newlyDetectedObjects);
     figure;
     imshow(frames{k}.content);
-    plotObjects(objectPositions, markers, 'r');
+    plotObjects(newObjectPositions, markers, 'r');
  %   plotObjects(newlyDetectedObjects, markers, 'b');
+    repository.trackObjects(objectPositions, newObjectPositions, k);
+    objectPositions = newObjectPositions;
 end
 
