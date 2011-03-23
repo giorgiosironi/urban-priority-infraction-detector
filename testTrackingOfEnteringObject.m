@@ -27,16 +27,19 @@ for i=1:LTracking
     sprintf('Acquired frame %d with integral histogram', i)
 end
 
-objects = finder.findInForeground(Frame(video(:, :, 1, 1)), integralHistograms{1});
-sprintf('Objects found: %d', size(objects, 1))
+objectPositions = finder.findInForeground(Frame(video(:, :, 1, 1)), integralHistograms{1});
+sprintf('Objects found: %d', size(objectPositions, 1))
 figure;
 imshow(frames{1}.content);
-plotObjects(objects, markers, 'r');
+plotObjects(objectPositions, markers, 'r');
 
 for k=2:LTracking
     sprintf('Looking in %d frame', k)
-    for i=1:size(objects, 1)
-        patches = objects{i}.patches;
+    for i=1:size(objectPositions, 1)
+        if (objectPositions{i}.isOutOfImage())
+            continue;
+        end
+        patches = objectPositions{i}.patches;
         voteMaps = cell(0);
         sprintf('Object %d with %d patches', i, size(patches, 1));
         for j=1:size(patches, 1)
@@ -53,17 +56,17 @@ for k=2:LTracking
         offsets = map.offsets(indexes(1), :);
         dx = offsets(1);
         dy = offsets(2);
-        objects{i} = objects{i}.move(dx, dy, sizeLimits);
-        objects{i} = templateUpdater.updateTemplate(objects{i}, integralHistograms{k});
+        objectPositions{i} = objectPositions{i}.move(dx, dy, sizeLimits);
+        objectPositions{i} = templateUpdater.updateTemplate(objectPositions{i}, integralHistograms{k});
     end
     nextFrame = Frame(video(:, :, 1, k));
-    nextFrame = nextFrame.removeObjects(objects);
+    nextFrame = nextFrame.removeObjects(objectPositions);
     newlyDetectedObjects = finder.findInForeground(nextFrame, integralHistograms{1});
 %    nextFrame = nextFrame.removeObjects(newlyDetectedObjects);
-    objects = expansionUpdater.updateTemplate(objects, nextFrame, integralHistograms{k}, newlyDetectedObjects);
+    objectPositions = expansionUpdater.updateTemplate(objectPositions, nextFrame, integralHistograms{k}, newlyDetectedObjects);
     figure;
     imshow(frames{k}.content);
-    plotObjects(objects, markers, 'r');
+    plotObjects(objectPositions, markers, 'r');
  %   plotObjects(newlyDetectedObjects, markers, 'b');
 end
 

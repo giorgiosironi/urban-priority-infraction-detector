@@ -4,8 +4,7 @@ classdef TrackedObjectPosition < handle
     end
     methods
         function obj = TrackedObjectPosition(patches)
-            assert(1 == size(patches, 2));
-            assert(size(patches, 1) > 0);
+            assert(1 >= size(patches, 2));
             obj.patches = patches;
         end
         function newPosition = move(self, dx, dy, limits)
@@ -23,6 +22,9 @@ classdef TrackedObjectPosition < handle
                 end
             end
             newPosition = TrackedObjectPosition(newPatches);
+        end
+        function b = isOutOfImage(self)
+            b = size(self.patches, 1) == 0;
         end
         function newPosition = addPatches(self, patches)
             newPosition = TrackedObjectPosition.withoutDuplicates([self.patches; patches]);

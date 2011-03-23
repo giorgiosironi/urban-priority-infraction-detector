@@ -17,6 +17,12 @@ assertEqual([2 1], size(newPosition.patches));
 assertEqual(Area.fromXYtoXY(102, 212, 111, 221), newPosition.patches{1}.area);
 assertEqual(Area.fromXYtoXY(107, 212, 116, 221), newPosition.patches{2}.area);
 
+function testConsidersAnObjectWithAllPAtchesRemovedAsHavingGoneOutOfTheImage
+position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 11, 10, 20))});
+newPosition = position.move(200, 100, [110 220]);
+assertFalse(position.isOutOfImage());
+assertTrue(newPosition.isOutOfImage());
+
 function testAddsPatchesToUpdateItsTemplate
 position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 2, 2))});
 position = position.addPatches({Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))});
