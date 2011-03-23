@@ -43,6 +43,12 @@ classdef TrackedObjectPosition < handle
                 end
             end
         end
+        function areas = getAreas(self)
+            areas = cell(0);
+            for i=1:size(self.patches, 1)
+                areas = [areas; {self.patches{i}.area}];
+            end
+        end
     end
     methods(Static)
         function position = withoutDuplicates(patches)
