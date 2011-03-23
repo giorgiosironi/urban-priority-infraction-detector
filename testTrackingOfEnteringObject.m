@@ -1,5 +1,5 @@
 L = 100;
-LTracking = 20;
+LTracking = 12;
 remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));

@@ -39,7 +39,7 @@ classdef ExpansionTemplateUpdater
                 for j=1:size(newObjects)
                     if (newObjects{j}.collidesWithObject(detectedObjects{i}))
                         isNew = false;
-                        sprintf('new object %d collides with object %d', j, i)
+%                        sprintf('new object %d collides with object %d', j, i)
                     end
                 end
                 if (isNew)
