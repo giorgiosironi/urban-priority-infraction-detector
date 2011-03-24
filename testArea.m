@@ -69,6 +69,10 @@ area = Area.fromXYtoXY(11, 31, 20, 40);
 assertTrue(area.collidesWith(Area.fromXYtoXY(11, 41, 20, 50)));
 assertTrue(area.collidesWith(Area.fromXYtoXY(21, 31, 30, 40)));
 
+function testCollidesWithIdenticalArea
+area = Area.fromXYtoXY(11, 31, 20, 40);
+assertTrue(area.collidesWith(area));
+
 function testDetectsContainmentOfAnotherArea
 area = Area.fromXYtoXY(1, 5, 4, 10);
 assertTrue(area.contains(Area.fromXYtoXY(2, 5, 4, 9)));
