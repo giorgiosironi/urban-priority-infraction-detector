@@ -20,5 +20,24 @@ classdef ObjectRepository < handle
                 self.objects = [self.objects; {newObject}];
             end
         end
+        function objectsByTrajectory = clusterObjects(self, trajectories)
+            objectsByTrajectory = cell(size(trajectories)); 
+            for i=1:size(objectsByTrajectory, 1)
+                objectsByTrajectory{i} = cell(0);
+            end
+            for j=1:size(self.objects)
+                currentObject = self.objects{j};
+                maximumFitness = 0;
+                trajectory = 0;
+                for i=1:size(trajectories, 1)
+                    fitness = trajectories{i}.getFitness(currentObject);
+                    if (fitness > maximumFitness)
+                        maximumFitness = fitness;
+                        trajectory = i;
+                    end
+                end
+                objectsByTrajectory{trajectory} = [objectsByTrajectory{i}; {currentObject}];
+            end
+        end
     end
 end
