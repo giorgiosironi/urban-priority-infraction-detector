@@ -5,6 +5,9 @@ classdef Object < handle
     end
     methods
         function obj = Object(positions, frames)
+            assert(size(positions, 2) <= 1);
+            assert(size(frames, 2) <= 1);
+            assert(size(positions, 1) == size(frames, 1));
             obj.positions = positions;
             obj.frames = frames;
         end
