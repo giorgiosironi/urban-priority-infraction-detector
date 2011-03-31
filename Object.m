@@ -26,6 +26,13 @@ classdef Object < handle
                 end
             end
         end
+        function object = filter(self, areaFilter)
+            positions = {};
+            for i=1:size(self.positions, 1)
+                positions = [positions; self.positions{i}.filter(areaFilter)];
+            end
+            object = Object(positions, frames);
+        end
     end
     methods(Static)
         function o = fromKnownPosition(position, frame)

@@ -12,5 +12,12 @@ classdef ObjectCluster < handle
         function object = at(self, index)
             object = self.objects{index};
         end
+        function cluster = filter(self, areaFilter)
+            objects = {};
+            for i=1:size(self.objects, 1)
+                objects = [objects; {self.objects{i}.filter(areaFilter)}];
+            end
+            cluster = ObjectCluster(objects);
+        end
     end
 end
