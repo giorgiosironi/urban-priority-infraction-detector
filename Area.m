@@ -33,6 +33,9 @@ classdef Area < handle
             maxY = y + 4;
             area = Area.fromXYtoXY(minX, minY, maxX, maxY);
         end
+        function area = singlePoint(x, y)
+            area = Area.fromXYtoXY(x, y, x, y);
+        end
     end
     methods
         function a = transform(self, T)

@@ -10,7 +10,7 @@ classdef TrackedObjectPosition < handle
                 displacement = [0 0];
             end
             obj.patches = patches;
-            obj.displacementFromPrevious = displacement;
+            obj.displacementFromPrevious = int16(displacement);
         end
         function newPosition = move(self, dx, dy, limits)
             if (nargin == 3)
@@ -67,7 +67,17 @@ classdef TrackedObjectPosition < handle
                     end
                 end
             end
-            newPosition = TrackedObjectPosition(patches);
+            displacementStart = areas{1}.getCentroid();
+            displacementStartArea = Area.singlePoint(displacementStart(1), displacementStart(2));
+            displacementEnd = double(displacementStart) + double(self.displacementFromPrevious);
+            displacementEndArea = Area.singlePoint(displacementEnd(1), displacementEnd(2));
+            newDisplacement = [];
+            displacementStartAreas = areaFilter.filterAreas({displacementStartArea});
+            newStartArea = displacementStartAreas{1};
+            displacementEndAreas = areaFilter.filterAreas({displacementEndArea});
+            newEndArea = displacementEndAreas{1};
+            newDisplacement = newEndArea.getCentroid() - newStartArea.getCentroid();
+            newPosition = TrackedObjectPosition(patches, newDisplacement);
         end
     end
     methods(Static)

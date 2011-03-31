@@ -5,7 +5,7 @@ function testMovesAlongAVector
 dummyH = 42;
 position = TrackedObjectPosition({Patch(dummyH, Area.fromXYtoXY(1, 11, 10, 20)); Patch(dummyH, Area.fromXYtoXY(11, 11, 20, 20))});
 newPosition = position.move(100, 200);
-assertEqual([100 200], newPosition.displacementFromPrevious);
+assertEqual(int16([100 200]), newPosition.displacementFromPrevious);
 assertEqual([2 1], size(newPosition.patches));
 assertEqual(Area.fromXYtoXY(101, 211, 110, 220), newPosition.patches{1}.area);
 assertEqual(Area.fromXYtoXY(111, 211, 120, 220), newPosition.patches{2}.area);
@@ -57,3 +57,13 @@ position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 10, 10)); Pat
 filter = SouthAreaFilter();
 newPosition = position.filter(filter);
 assertEqual([1 1], size(newPosition.patches));
+
+function testFiltersAlsoItsDisplacementWhenTransformingTheAreas
+position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 10, 10))}, [3 4]);
+filter = RectificationAreaFilter(getDilationTForm(2));
+newPosition = position.filter(filter);
+assertEqual(int16([6 8]), newPosition.displacementFromPrevious);
+
+function T = getDilationTForm(factor)
+coordinates = [0 0; 1 1; 0 1; 1 0];
+T = maketform('projective', coordinates, coordinates * factor);
