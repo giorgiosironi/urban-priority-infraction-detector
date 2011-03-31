@@ -11,33 +11,30 @@ classdef Object < handle
             obj.positions = positions;
             obj.frames = frames;
         end
-        function addKnownPosition(self, position, frame)
-            self.positions = [self.positions; {position.getAreas()}];
+        function addKnownSighting(self, sighting, frame)
+            self.positions = [self.positions; {sighting.getPosition()}];
             self.frames = [self.frames; frame];
         end
         function b = passedFrom(self, area)
             b = false;
-            for i=1:size(self.frames, 1)
-                positions = self.positions{i};
-                for j=1:size(positions, 1)
-                    if (positions{j}.collidesWith(area))
-                        b = true;
-                    end
+            for i=1:size(self.positions, 1)
+                if (self.positions{i}.collidesWith(area))
+                    b = true;
                 end
             end
         end
         function object = filter(self, areaFilter)
             positions = {};
             for i=1:size(self.positions, 1)
-                positions = [positions; self.positions{i}.filter(areaFilter)];
+                positions = [positions; {self.positions{i}.filter(areaFilter)}];
             end
             object = Object(positions, frames);
         end
     end
     methods(Static)
-        function o = fromKnownPosition(position, frame)
+        function o = fromKnownSighting(position, frame)
             o = Object({}, []); 
-            o.addKnownPosition(position, frame);
+            o.addKnownSighting(position, frame);
         end
     end
 end

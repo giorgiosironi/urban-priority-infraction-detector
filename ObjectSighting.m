@@ -1,10 +1,10 @@
-classdef TrackedObjectPosition < handle
+classdef ObjectSighting < handle
     properties
         patches;
         displacementFromPrevious;
     end
     methods
-        function obj = TrackedObjectPosition(patches, displacement)
+        function obj = ObjectSighting(patches, displacement)
             assert(1 >= size(patches, 2));
             if (nargin < 2)
                 displacement = [0 0];
@@ -26,13 +26,16 @@ classdef TrackedObjectPosition < handle
                     newPatches = [newPatches; {Patch(oldHistogram, newArea)}];
                 end
             end
-            newPosition = TrackedObjectPosition(newPatches, [dx dy]);
+            newPosition = ObjectSighting(newPatches, [dx dy]);
         end
         function b = isOutOfImage(self)
             b = size(self.patches, 1) == 0;
         end
-        function newPosition = addPatches(self, patches)
-            newPosition = TrackedObjectPosition.withoutDuplicates([self.patches; patches]);
+        function newSighting = addPatches(self, patches)
+            newSighting = ObjectSighting.withoutDuplicates([self.patches; patches]);
+        end
+        function position = getPosition(self)
+            position = ObjectPosition(self.getAreas(), self.displacementFromPrevious);
         end
         function b = collidesWith(self, area)
             b = false;
@@ -77,7 +80,7 @@ classdef TrackedObjectPosition < handle
             displacementEndAreas = areaFilter.filterAreas({displacementEndArea});
             newEndArea = displacementEndAreas{1};
             newDisplacement = newEndArea.getCentroid() - newStartArea.getCentroid();
-            newPosition = TrackedObjectPosition(patches, newDisplacement);
+            newPosition = ObjectSighting(patches, newDisplacement);
         end
     end
     methods(Static)
@@ -91,7 +94,7 @@ classdef TrackedObjectPosition < handle
                 end
             end
             patches(toDelete) = [];
-            position = TrackedObjectPosition(patches);
+            position = ObjectSighting(patches);
         end
     end
 end

@@ -23,10 +23,10 @@ assertEqual(1, result);
 
 function testRemovesObjectsFromItself()
 frame = Frame(zeros(10, 10));
-frame = frame.removeObjects({TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))})});
+frame = frame.removeObjects({ObjectSighting({Patch(NaN, Area.fromXYtoXY(1, 3, 2, 4))})});
 assertEqual([-1 -1 ; -1 -1], frame.content(1:2, 3:4));
 
 function testRemovesObjectsWhichArePartiallyInTheImageWithoutAffectingBoundaries
 frame = Frame(zeros(10, 10));
-frame = frame.removeObjects({TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 1, 40))})});
+frame = frame.removeObjects({ObjectSighting({Patch(NaN, Area.fromXYtoXY(1, 1, 1, 40))})});
 assertEqual([10 10], size(frame.content));

@@ -22,7 +22,7 @@ classdef HistogramsTemplateUpdater < handle
                     newPatches = [newPatches; {oldPatch}];
                 end
             end
-            newObject = TrackedObjectPosition(newPatches);
+            newObject = ObjectSighting(newPatches);
         end
     end
 end

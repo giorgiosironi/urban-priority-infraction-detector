@@ -3,20 +3,20 @@ classdef ObjectRepository < handle
         objects;
     end
     methods
-        function initializeObjects(self, positions, frame)
-            for i=1:size(positions, 1)
-                newObject = Object.fromKnownPosition(positions{i}, frame);
+        function initializeObjects(self, sightings, frame)
+            for i=1:size(sightings, 1)
+                newObject = Object.fromKnownSighting(sightings{i}, frame);
                 self.objects = [self.objects; {newObject}];
             end
         end
-        function trackObjects(self, oldPositions, newPositions, newFrame)
-            oldObjectsNumber = size(oldPositions, 1);
+        function trackObjects(self, oldSightings, newSightings, newFrame)
+            oldObjectsNumber = size(oldSightings, 1);
             for i=1:oldObjectsNumber
-                self.objects{i}.addKnownPosition(newPositions{i}, newFrame);
+                self.objects{i}.addKnownSighting(newSightings{i}, newFrame);
             end
-            newObjectsNumber = size(newPositions, 1) - size(oldPositions, 1);
+            newObjectsNumber = size(newSightings, 1) - size(oldSightings, 1);
             for i=oldObjectsNumber+1:oldObjectsNumber+newObjectsNumber
-                newObject = Object.fromKnownPosition(newPositions{i}, newFrame);
+                newObject = Object.fromKnownSighting(newSightings{i}, newFrame);
                 self.objects = [self.objects; {newObject}];
             end
         end

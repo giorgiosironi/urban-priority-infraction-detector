@@ -80,7 +80,7 @@ classdef ObjectFinder < handle
                     patches = [patches; {Patch(histogram, area)}];
                 end
                 if (size(patches, 1) > 0)
-                    objects = [objects; {TrackedObjectPosition(patches)}];
+                    objects = [objects; {ObjectSighting(patches)}];
                 end
             end
         end

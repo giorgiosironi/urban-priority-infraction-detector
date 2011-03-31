@@ -13,4 +13,4 @@ trajectory = Trajectory({Area.fromXYtoXY(8, 8, 9, 9); Area.fromXYtoXY(100, 100, 
 assertEqual(0.5, trajectory.getFitness(object));
 
 function object = getObjectThatPassedFrom(area)
-object = Object({{TrackedObjectPosition({Patch(NaN, area)})}}, [1]);
+object = Object({ObjectPosition({area})}, [1]);

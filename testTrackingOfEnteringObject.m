@@ -10,6 +10,10 @@ markers = 'ox+.*sd<>v^ph';
 startFrameNumber = 1350;
 %startFrameNumber = 832;
 repository = ObjectRepository();
+rectification_config;
+estimator = HomographyEstimator();
+rectificationT = estimator.getHomography(from, to);
+trajectories = {Trajectory({Area.aroundPoint(231, 13)}); Trajectory({Area.aroundPoint(264, 626)})};
 
 frames = cell(L, 1);
 video = zeros(480, 640, 1, L);
@@ -72,4 +76,8 @@ for k=2:LTracking
     repository.trackObjects(objectPositions, newObjectPositions, k);
     objectPositions = newObjectPositions;
 end
+
+objectsByTrajectories = repository.clusterObjects(trajectories);
+southObjectsByTrajectories = objectsByTrajectories.filter(SouthAreaFilter());
+rectifiedObjectsByTrajectories = southObjectsByTrajectories.filter(RectificationAreaFilter(rectificationT));
 
