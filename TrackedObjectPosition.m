@@ -1,11 +1,16 @@
 classdef TrackedObjectPosition < handle
     properties
         patches;
+        displacementFromPrevious;
     end
     methods
-        function obj = TrackedObjectPosition(patches)
+        function obj = TrackedObjectPosition(patches, displacement)
             assert(1 >= size(patches, 2));
+            if (nargin < 2)
+                displacement = [0 0];
+            end
             obj.patches = patches;
+            obj.displacementFromPrevious = displacement;
         end
         function newPosition = move(self, dx, dy, limits)
             if (nargin == 3)
@@ -21,7 +26,7 @@ classdef TrackedObjectPosition < handle
                     newPatches = [newPatches; {Patch(oldHistogram, newArea)}];
                 end
             end
-            newPosition = TrackedObjectPosition(newPatches);
+            newPosition = TrackedObjectPosition(newPatches, [dx dy]);
         end
         function b = isOutOfImage(self)
             b = size(self.patches, 1) == 0;
