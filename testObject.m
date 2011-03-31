@@ -3,7 +3,7 @@ initTestSuite;
 
 function testInitializesItselfFromAObjectSighting
 area = Area.fromXYtoXY(1, 1, 10, 10);
-sighting = ObjectSighting({Patch(NaN, area)});
+sighting = ObjectSighting.newSighting({Patch(NaN, area)});
 obj = Object.fromKnownSighting(sighting, 40);
 assertEqual([1 1], size(obj.positions));
 positions = obj.positions{1};
@@ -12,7 +12,7 @@ assertEqual(40, obj.frames(1));
 
 function testStoresMoreThanOnePosition
 area = Area.fromXYtoXY(1, 1, 10, 10);
-sighting = ObjectSighting({Patch(NaN, area)});
+sighting = ObjectSighting.newSighting({Patch(NaN, area)});
 obj = Object({}, []);
 obj.addKnownSighting(sighting, 40);
 obj.addKnownSighting(sighting, 41);

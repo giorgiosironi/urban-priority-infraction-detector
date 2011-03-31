@@ -6,9 +6,6 @@ classdef ObjectSighting < handle
     methods
         function obj = ObjectSighting(patches, displacement)
             assert(1 >= size(patches, 2));
-            if (nargin < 2)
-                displacement = [0 0];
-            end
             obj.patches = patches;
             obj.displacementFromPrevious = int16(displacement);
         end
@@ -32,7 +29,7 @@ classdef ObjectSighting < handle
             b = size(self.patches, 1) == 0;
         end
         function newSighting = addPatches(self, patches)
-            newSighting = ObjectSighting.withoutDuplicates([self.patches; patches]);
+            newSighting = ObjectSighting.withoutDuplicates([self.patches; patches], self.displacementFromPrevious);
         end
         function position = getPosition(self)
             position = ObjectPosition(self.getAreas(), self.displacementFromPrevious);
@@ -59,32 +56,12 @@ classdef ObjectSighting < handle
                 areas = [areas; {self.patches{i}.area}];
             end
         end
-        function newPosition = filter(self, areaFilter)
-            areas = self.getAreas();
-            areas = areaFilter.filterAreas(areas);
-            patches = {};
-            for i=1:size(self.patches, 1)
-                for j=1:size(areas, 1)
-                    if (self.patches{i}.coversExactly(areas{j}))
-                        patches = [patches; self.patches(i)];
-                    end
-                end
-            end
-            displacementStart = areas{1}.getCentroid();
-            displacementStartArea = Area.singlePoint(displacementStart(1), displacementStart(2));
-            displacementEnd = double(displacementStart) + double(self.displacementFromPrevious);
-            displacementEndArea = Area.singlePoint(displacementEnd(1), displacementEnd(2));
-            newDisplacement = [];
-            displacementStartAreas = areaFilter.filterAreas({displacementStartArea});
-            newStartArea = displacementStartAreas{1};
-            displacementEndAreas = areaFilter.filterAreas({displacementEndArea});
-            newEndArea = displacementEndAreas{1};
-            newDisplacement = newEndArea.getCentroid() - newStartArea.getCentroid();
-            newPosition = ObjectSighting(patches, newDisplacement);
-        end
     end
     methods(Static)
-        function position = withoutDuplicates(patches)
+        function newSighting = newSighting(patches)
+            newSighting = ObjectSighting(patches, [0 0]);
+        end
+        function position = withoutDuplicates(patches, displacementFromPrevious)
             toDelete = [];
             for i=1:size(patches, 1)
                 for j=i+1:size(patches, 1)
@@ -94,7 +71,7 @@ classdef ObjectSighting < handle
                 end
             end
             patches(toDelete) = [];
-            position = ObjectSighting(patches);
+            position = ObjectSighting(patches, displacementFromPrevious);
         end
     end
 end

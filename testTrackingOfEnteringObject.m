@@ -31,20 +31,20 @@ for i=1:LTracking
     sprintf('Acquired frame %d with integral histogram', i)
 end
 
-objectPositions = finder.findInForeground(Frame(video(:, :, 1, 1)), integralHistograms{1});
-sprintf('Objects found: %d', size(objectPositions, 1))
+objectSightings = finder.findInForeground(Frame(video(:, :, 1, 1)), integralHistograms{1});
+sprintf('Objects found: %d', size(objectSightings, 1))
 figure;
 imshow(frames{1}.content);
-plotObjects(objectPositions, markers, 'r');
-repository.initializeObjects(objectPositions, 1);
+plotObjects(objectSightings, markers, 'r');
+repository.initializeObjects(objectSightings, 1);
 
 for k=2:LTracking
     sprintf('Looking in %d frame', k)
-    for i=1:size(objectPositions, 1)
-        if (objectPositions{i}.isOutOfImage())
+    for i=1:size(objectSightings, 1)
+        if (objectSightings{i}.isOutOfImage())
             continue;
         end
-        patches = objectPositions{i}.patches;
+        patches = objectSightings{i}.patches;
         voteMaps = cell(0);
         sprintf('Object %d with %d patches', i, size(patches, 1));
         for j=1:size(patches, 1)
@@ -61,20 +61,20 @@ for k=2:LTracking
         offsets = map.offsets(indexes(1), :);
         dx = offsets(1);
         dy = offsets(2);
-        objectPositions{i} = objectPositions{i}.move(dx, dy, sizeLimits);
-        objectPositions{i} = templateUpdater.updateTemplate(objectPositions{i}, integralHistograms{k});
+        objectSightings{i} = objectSightings{i}.move(dx, dy, sizeLimits);
+        objectSightings{i} = templateUpdater.updateTemplate(objectSightings{i}, integralHistograms{k});
     end
     nextFrame = Frame(video(:, :, 1, k));
-    nextFrame = nextFrame.removeObjects(objectPositions);
+    nextFrame = nextFrame.removeObjects(objectSightings);
     newlyDetectedObjects = finder.findInForeground(nextFrame, integralHistograms{1});
 %    nextFrame = nextFrame.removeObjects(newlyDetectedObjects);
-    newObjectPositions = expansionUpdater.updateTemplate(objectPositions, nextFrame, integralHistograms{k}, newlyDetectedObjects);
+    newObjectSightings = expansionUpdater.updateTemplate(objectSightings, nextFrame, integralHistograms{k}, newlyDetectedObjects);
     figure;
     imshow(frames{k}.content);
-    plotObjects(newObjectPositions, markers, 'r');
+    plotObjects(newObjectSightings, markers, 'r');
  %   plotObjects(newlyDetectedObjects, markers, 'b');
-    repository.trackObjects(objectPositions, newObjectPositions, k);
-    objectPositions = newObjectPositions;
+    repository.trackObjects(objectSightings, newObjectSightings, k);
+    objectSightings = newObjectSightings;
 end
 
 objectsByTrajectories = repository.clusterObjects(trajectories);

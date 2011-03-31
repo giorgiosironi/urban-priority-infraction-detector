@@ -80,7 +80,7 @@ classdef ObjectFinder < handle
                     patches = [patches; {Patch(histogram, area)}];
                 end
                 if (size(patches, 1) > 0)
-                    objects = [objects; {ObjectSighting(patches)}];
+                    objects = [objects; {ObjectSighting.newSighting(patches)}];
                 end
             end
         end

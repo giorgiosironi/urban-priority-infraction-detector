@@ -28,7 +28,7 @@ classdef Object < handle
             for i=1:size(self.positions, 1)
                 positions = [positions; {self.positions{i}.filter(areaFilter)}];
             end
-            object = Object(positions, frames);
+            object = Object(positions, self.frames);
         end
     end
     methods(Static)

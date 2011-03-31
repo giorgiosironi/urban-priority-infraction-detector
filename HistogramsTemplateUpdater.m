@@ -22,7 +22,7 @@ classdef HistogramsTemplateUpdater < handle
                     newPatches = [newPatches; {oldPatch}];
                 end
             end
-            newObject = ObjectSighting(newPatches);
+            newObject = ObjectSighting(newPatches, object.displacementFromPrevious);
         end
     end
 end
