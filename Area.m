@@ -26,6 +26,13 @@ classdef Area < handle
         function area = fromDimensions(x, y)
             area = Area(int16(1), int16(1), int16(x), int16(y));
         end
+        function area = aroundPoint(x, y)
+            minX = x - 5;
+            maxX = x + 4;
+            minY = y - 5;
+            maxY = y + 4;
+            area = Area.fromXYtoXY(minX, minY, maxX, maxY);
+        end
     end
     methods
         function c = getCentroid(self)
