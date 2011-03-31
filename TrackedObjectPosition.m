@@ -51,6 +51,19 @@ classdef TrackedObjectPosition < handle
                 areas = [areas; {self.patches{i}.area}];
             end
         end
+        function newPosition = filter(self, areaFilter)
+            areas = self.getAreas();
+            areas = areaFilter.filterAreas(areas);
+            patches = {};
+            for i=1:size(self.patches, 1)
+                for j=1:size(areas, 1)
+                    if (self.patches{i}.coversExactly(areas{j}))
+                        patches = [patches; self.patches(i)];
+                    end
+                end
+            end
+            newPosition = TrackedObjectPosition(patches);
+        end
     end
     methods(Static)
         function position = withoutDuplicates(patches)

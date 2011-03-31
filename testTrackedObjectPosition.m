@@ -50,3 +50,9 @@ eastPosition = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(11, 31, 20, 40)
 southPosition = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(21, 21, 30, 30))});
 assertTrue(position.collidesWithObject(eastPosition));
 assertTrue(position.collidesWithObject(southPosition));
+
+function testFilterItsPatchesBasedOnAnAreaFilter
+position = TrackedObjectPosition({Patch(NaN, Area.fromXYtoXY(1, 1, 10, 10)); Patch(NaN, Area.fromXYtoXY(11, 1, 20, 10))});
+filter = SouthAreaFilter();
+newPosition = position.filter(filter);
+assertEqual([1 1], size(newPosition.patches));

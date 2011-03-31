@@ -11,5 +11,8 @@ classdef Patch < handle
         function b = coversSameAs(self, anotherPatch)
             b = self.area.equals(anotherPatch.area);
         end
+        function b = coversExactly(self, area)
+            b = self.area.equals(area);
+        end
     end
 end
