@@ -38,6 +38,10 @@ classdef ObjectRepository < handle
                 end
                 objectsByTrajectory{trajectory} = [objectsByTrajectory{i}; {currentObject}];
             end
+            for i=1:size(objectsByTrajectory, 1)
+                objectsByTrajectory{i} = ObjectCluster(objectsByTrajectory{i});
+            end
+            objectsByTrajectory = ObjectClusters(objectsByTrajectory);
         end
     end
 end

@@ -34,9 +34,12 @@ repository.initializeObjects({oldPosition; oldPosition}, 40);
 repository.trackObjects({oldPosition; oldPosition}, {getPosition(northWest); getPosition(northEast)}, 41);
 trajectories = {getTrajectoryBetweenTwoAreas(center, northWest); getTrajectoryBetweenTwoAreas(center, northEast)};
 objectsByTrajectory = repository.clusterObjects(trajectories);
-assertEqual([2 1], size(objectsByTrajectory));
-assertEqual([1 1], size(objectsByTrajectory{1}));
-assertEqual([1 1], size(objectsByTrajectory{2}));
+assertEqual('ObjectClusters', class(objectsByTrajectory));
+assertEqual([2 1], objectsByTrajectory.size());
+firstCluster = objectsByTrajectory.at(1);
+assertEqual('ObjectCluster', class(firstCluster));
+assertEqual([1 1], firstCluster.size());
+assertEqual([1 1], objectsByTrajectory.at(2).size());
 
 function t = getTrajectoryBetweenTwoAreas(first, second)
 t = Trajectory({first; second});
