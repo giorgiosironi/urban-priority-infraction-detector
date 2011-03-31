@@ -1,0 +1,22 @@
+coordinates of getpts/imshow
+A roof angle: [285 231]
+B start of strisce: [500 221]
+C start of yellow building: [61 213]
+D stop line conjunction with sidewalk: [500 399]
+E stop line finish [0 251]
+
+distances in pixel
+A = 0, 0
+C = x=0, y=-213 (orthogonal)
+B = x=-58 (orthogonal), y=0
+D = 138, angle is 59° so x=-71, y=118
+E = 78, angle is 34° so x=65, y=44
+
+96 pixel = 10m = 1000 cm
+
+distances in centimeters (conversion in cm: *1000/96)
+A = 0, 0
+B = x=-604, y=0
+C = x=0, y=-2219
+D = x=740, y=1229
+E = x=677, y=458
