@@ -35,6 +35,11 @@ classdef Area < handle
         end
     end
     methods
+        function a = transform(self, T)
+            [firstY firstX] = tformfwd(T, double(self.maxY), double(self.maxX));
+            [secondY secondX] = tformfwd(T, double(self.minY), double(self.minX));
+            a = Area.fromXYtoXY(min([firstX secondX]), min([firstY secondY]), max([firstX secondX]), max([firstY secondY]));
+        end
         function c = getCentroid(self)
             c = [(self.minX + self.maxX) / 2, (self.minY + self.maxY) / 2];
         end
