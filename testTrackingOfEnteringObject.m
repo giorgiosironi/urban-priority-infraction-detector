@@ -1,9 +1,9 @@
 L = 100;
-LTracking = 12;
+LTracking = 20;
 remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
-patchFinder = PatchFinder(30, 30, 4, SimpleComparator());
+patchFinder = PatchFinder(30, 30, 2, SimpleComparator());
 templateUpdater = HistogramsTemplateUpdater(MaximumDistanceAcceptanceStrategy(SimpleComparator(), 0.1));
 expansionUpdater = ExpansionTemplateUpdater(ForegroundValidityStrategy(50));
 markers = 'ox+.*sd<>v^ph';
