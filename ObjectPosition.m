@@ -35,5 +35,8 @@ classdef ObjectPosition < handle
                 end
             end
         end
+        function p = changeDisplacement(self, displacement)
+            p = ObjectPosition(self.areas, displacement);
+        end
     end
 end
