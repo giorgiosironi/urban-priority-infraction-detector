@@ -36,6 +36,9 @@ classdef ObjectRepository < handle
                         trajectory = i;
                     end
                 end
+                if (trajectory == 0)
+                    continue;
+                end
                 objectsByTrajectory{trajectory} = [objectsByTrajectory{i}; {currentObject}];
             end
             for i=1:size(objectsByTrajectory, 1)

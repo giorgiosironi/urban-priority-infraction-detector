@@ -1,6 +1,5 @@
 function plotMovement(positions)
 markers = '.ox+*sdv^<>ph';
-figure;
 for i=1:size(positions, 1)
     hold on;
     for j=1:size(positions{i}.areas, 1)

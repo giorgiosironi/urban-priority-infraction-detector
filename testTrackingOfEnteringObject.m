@@ -1,5 +1,5 @@
 L = 100;
-LTracking = 20;
+LTracking = 3;
 remover = BackgroundRemover(10, -1);
 finder = ObjectFinder(PatchesSelector(24, 32), ForegroundValidityStrategy(50), LabelsContainerFactory());
 factory = IntegralHistogramFactory(GrayHistogramStrategy(16));
@@ -7,13 +7,15 @@ patchFinder = PatchFinder(30, 30, 2, SimpleComparator());
 templateUpdater = HistogramsTemplateUpdater(MaximumDistanceAcceptanceStrategy(SimpleComparator(), 0.1));
 expansionUpdater = ExpansionTemplateUpdater(ForegroundValidityStrategy(50));
 markers = 'ox+.*sd<>v^ph';
-startFrameNumber = 1350;
+%startFrameNumber = 1350;
+startFrameNumber = 1365;
+%startFrameNumber = 1320;
 %startFrameNumber = 832;
 repository = ObjectRepository();
 rectification_config;
 estimator = HomographyEstimator();
 rectificationT = estimator.getHomography(from, to);
-trajectories = {Trajectory({Area.aroundPoint(231, 13)}); Trajectory({Area.aroundPoint(264, 626)})};
+trajectories = {Trajectory({Area.aroundPoint(231, 13)}); Trajectory({Area.aroundPoint(264, 626)}); Trajectory({Area.aroundPoint(180, 103); Area.aroundPoint(269, 450); Area.aroundPoint(253, 335)})};
 
 frames = cell(L, 1);
 video = zeros(480, 640, 1, L);
@@ -23,6 +25,8 @@ for i=1:L
     frames{i} = Frame(rgb2gray(frame));
     video(:, :, 1, i) = frames{i}.content;
 end
+background = median(video, 4);
+rectifiedBackground = imtransform(background, rectificationT, 'XData', [-1000 1000], 'YData', [-1000 1500]);
 video = remover.filter(video);
 sizeLimits = size(video(:, :, 1, 1));
 'Background removed'
@@ -79,5 +83,15 @@ end
 
 objectsByTrajectories = repository.clusterObjects(trajectories);
 southObjectsByTrajectories = objectsByTrajectories.filter(SouthAreaFilter());
+southDs = southObjectsByTrajectories.clusters{1}.objects{1}.getDisplacements();
 rectifiedObjectsByTrajectories = southObjectsByTrajectories.filter(RectificationAreaFilter(rectificationT));
+rectifiedModelledObjectsByTrajectories = rectifiedObjectsByTrajectories.modelMovement(LineMovement(3));
+ds = rectifiedObjectsByTrajectories.clusters{1}.objects{1}.getDisplacements();
+
+load sampler
+figure
+rectified_sample_r = imtransform(sampler, rectificationT, 'XData', [1 1000], 'YData', [1 1000]);
+imshow(rectified_sample_r)
+%plotMovement(rectifiedModelledObjectsByTrajectories.clusters{1}.objects{1}.positions)
+
 

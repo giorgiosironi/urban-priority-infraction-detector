@@ -19,5 +19,12 @@ classdef ObjectCluster < handle
             end
             cluster = ObjectCluster(objects);
         end
+        function cluster = modelMovement(self, movement)
+            objects = {};
+            for i=1:size(self.objects, 1)
+                objects = [objects; {self.objects{i}.modelMovement(movement)}];
+            end
+            cluster = ObjectCluster(objects);
+        end
     end
 end

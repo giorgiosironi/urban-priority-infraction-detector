@@ -41,6 +41,9 @@ assertEqual('ObjectCluster', class(firstCluster));
 assertEqual([1 1], firstCluster.size());
 assertEqual([1 1], objectsByTrajectory.at(2).size());
 
+function testDoesNotExplodewhenObjectsDoNotPertainToAnyTrajectory
+assertTrue(false)
+
 function t = getTrajectoryBetweenTwoAreas(first, second)
 t = Trajectory({first; second});
 

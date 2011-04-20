@@ -30,6 +30,15 @@ classdef Object < handle
             end
             object = Object(positions, self.frames);
         end
+        function object = modelMovement(self, movement)
+            object = Object(movement.removeNoise(self.positions), self.frames);
+        end
+        function ds = getDisplacements(self)
+            ds = [];
+            for i=1:size(self.positions, 1)
+                ds = [ds; self.positions{i}.displacementFromPrevious];
+            end
+        end
     end
     methods(Static)
         function o = fromKnownSighting(position, frame)
