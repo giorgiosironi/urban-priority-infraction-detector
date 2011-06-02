@@ -30,6 +30,13 @@ classdef Object < handle
             end
             object = Object(positions, self.frames);
         end
+        function object = filterPositions(self, positionsFilter)
+            positions = {};
+            for i=1:size(self.positions, 1)
+                positions = positionsFilter.filterPositions(positions);
+            end
+            object = Object(positions, self.frames);
+        end
         function object = modelMovement(self, movement)
             object = Object(movement.removeNoise(self.positions), self.frames);
         end
