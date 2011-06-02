@@ -1,7 +1,7 @@
 function test_suite = testRectificationAreaFilter
 initTestSuite;
 
-function testRemovesAreasWhichAreNotOnThePavement
+function testChangeTheCoordinatesOfAreas
 filter = RectificationAreaFilter(getDilation(2));
 areas = {Area.aroundPoint(20, 30)};
 newAreas = filter.filterAreas(areas);
