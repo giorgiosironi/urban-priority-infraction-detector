@@ -46,6 +46,18 @@ classdef Object < handle
                 ds = [ds; self.positions{i}.displacementFromPrevious];
             end
         end
+        function b = collidesWith(self, anotherObject)
+            b = false;
+            for i=1:size(self.positions, 1)
+                for j=1:size(anotherObject.positions, 1)
+                    if (self.frames(i) == anotherObject.frames(j))
+                        if (self.positions{i}.collidesWithPosition(anotherObject.positions{j}))
+                            b = true;
+                        end
+                    end
+                end
+            end
+        end
     end
     methods(Static)
         function o = fromKnownSighting(position, frame)

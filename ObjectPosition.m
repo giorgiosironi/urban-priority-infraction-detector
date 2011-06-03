@@ -35,6 +35,14 @@ classdef ObjectPosition < handle
                 end
             end
         end
+        function b = collidesWithPosition(self, anotherPosition)
+            b = false;
+            for j=1:size(anotherPosition.areas)
+                if (self.collidesWith(anotherPosition.areas{j}))
+                    b = true;
+                end
+            end
+        end
         function p = changeDisplacement(self, displacement)
             p = ObjectPosition(self.areas, displacement);
         end
