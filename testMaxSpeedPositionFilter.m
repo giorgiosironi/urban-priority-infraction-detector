@@ -22,6 +22,14 @@ positions = filter.filterPositions(positions);
 expected = {getPosition([0 0], [0 0]); getPosition([100 0], [100 0]); getPosition([200 0], [100 0]); getPosition([300 0], [100 0])};
 assertEqual(expected, positions);
 
+function testIsIninfluentOverObjectsWithOnlyOneKnownPosition
+filter = MaxSpeedPositionFilter();
+positions = {getPosition([0 0], [0 0])};
+filteredPositions = filter.filterPositions(positions);
+assertEqual(positions, filteredPositions);
+
+
+
 function p = getPosition(basePosition, displacement)
 p = ObjectPosition({Area.aroundPoint(basePosition(1), basePosition(2))}, displacement);
 

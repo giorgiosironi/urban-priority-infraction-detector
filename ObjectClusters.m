@@ -26,18 +26,8 @@ classdef ObjectClusters < handle
             end
             clusters = ObjectClusters(clusters);
         end
-        function collidedObjects = detectCollisions(self)
-            objects = {};
-            for i=1:size(self.clusters, 1)
-                objects = [objects; self.clusters{i}.objects];
-            end
-            for i=1:size(objects, 1)
-                for j=1:size(objects, 1)
-                    if (objects{i}.collidesWith(objects{j})) 
-                        collidedObjects = {objects{i}; objects{j}};
-                    end
-                end
-            end
+        function collidedObjects = detectCollisions(self, priorityRules)
+            collidedObjects = priorityRules.findCollisions(self.clusters);
         end
         function clusters = modelMovement(self, movement)
             clusters = {};
