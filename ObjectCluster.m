@@ -19,7 +19,7 @@ classdef ObjectCluster < handle
             end
             cluster = ObjectCluster(objects);
         end
-        function cluster = filter(self, positionsFilter)
+        function cluster = filterPositions(self, positionsFilter)
             objects = {};
             for i=1:size(self.objects, 1)
                 objects = [objects; {self.objects{i}.filterPositions(positionsFilter)}];
