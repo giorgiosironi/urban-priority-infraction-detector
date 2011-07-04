@@ -13,7 +13,7 @@ classdef PriorityRules < handle
         end
         function collisions = detectCollisions(self, clusters)
             collisions = {};
-            for k=1:self.priorities
+            for k=1:size(self.priorities, 1)
                 hasPriority = clusters{self.priorities(k, 1)};
                 givesPriority = clusters{self.priorities(k, 2)};
                 for i=1:size(hasPriority.objects, 1)
