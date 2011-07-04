@@ -42,7 +42,15 @@ assertEqual([1 1], firstCluster.size());
 assertEqual([1 1], objectsByTrajectory.at(2).size());
 
 function testDoesNotExplodewhenObjectsDoNotPertainToAnyTrajectory
-assertTrue(false)
+repository = ObjectRepository();
+oldPosition = getPosition(Area.fromXYtoXY(51, 51, 60, 60));
+repository.initializeObjects({oldPosition}, 40);
+repository.trackObjects({oldPosition}, {oldPosition}, 41);
+trajectories = {};
+objectsByTrajectory = repository.clusterObjects(trajectories);
+assertEqual('ObjectClusters', class(objectsByTrajectory));
+assertEqual([0 0], objectsByTrajectory.size());
+
 
 function t = getTrajectoryBetweenTwoAreas(first, second)
 t = Trajectory({first; second});
