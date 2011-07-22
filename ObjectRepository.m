@@ -30,7 +30,7 @@ classdef ObjectRepository < handle
                 maximumFitness = 0;
                 trajectory = 0;
                 for i=1:size(trajectories, 1)
-                    fitness = trajectories{i}.getFitness(currentObject);
+                    fitness = trajectories{i}.getFitness(currentObject)
                     if (fitness > maximumFitness)
                         maximumFitness = fitness;
                         trajectory = i;
@@ -39,7 +39,7 @@ classdef ObjectRepository < handle
                 if (trajectory == 0)
                     continue;
                 end
-                objectsByTrajectory{trajectory} = [objectsByTrajectory{i}; {currentObject}];
+                objectsByTrajectory{trajectory} = [objectsByTrajectory{trajectory}; {currentObject}];
             end
             for i=1:size(objectsByTrajectory, 1)
                 objectsByTrajectory{i} = ObjectCluster(objectsByTrajectory{i});
