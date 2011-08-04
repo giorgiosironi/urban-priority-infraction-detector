@@ -50,6 +50,7 @@ classdef Object < handle
                     if (self.frames(i) == anotherObject.frames(j))
                         if (self.positions{i}.collidesWithPosition(anotherObject.positions{j}))
                             b = true;
+                            sprintf('Collision in frame %d', self.frames(i))
                         end
                     end
                 end
